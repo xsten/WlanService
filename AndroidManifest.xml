@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="100"
-    android:versionName="1.00" >
-
+    android:versionCode="101"
+    android:versionName="1.01" >
+	<!-- 1.00 first commited version -->
+	<!-- 1.01 removed unuseful button from gui -->
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />

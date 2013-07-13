@@ -3,25 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/button1"
-        android:layout_centerHorizontal="true"
-        android:onClick="registerClicked"
-        android:text="Register" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button2"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="18dp"
-        android:text="Button" />
-
     <ToggleButton
         android:id="@+id/toggleButton1"
         android:layout_width="wrap_content"
@@ -57,5 +38,15 @@
         android:layout_below="@+id/introText"
         android:onClick="statusClicked"
         android:text="Status" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/introText"
+        android:layout_marginRight="24dp"
+        android:onClick="registerClicked"
+        android:text="Register" />
 
 </RelativeLayout>
