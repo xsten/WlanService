@@ -1,9 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="101"
-    android:versionName="1.01" >
+    android:versionCode="102"
+    android:versionName="1.02" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
+	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
@@ -15,18 +16,18 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <service
-        	android:name="net.stenuit.xavier.cetrelwlanservice.WlanService"
+        	android:name="net.stenuit.xavier.wlanservice.WlanService"
         	android:enabled="true">
     	</service>
     	<activity
-            android:name="net.stenuit.xavier.cetrelwlanservice.MainActivity"
+            android:name="net.stenuit.xavier.wlanservice.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    	<activity android:name="net.stenuit.xavier.cetrelwlanservice.SettingsActivity"></activity>
+    	<activity android:name="net.stenuit.xavier.wlanservice.SettingsActivity"></activity>
     </application>
 
 

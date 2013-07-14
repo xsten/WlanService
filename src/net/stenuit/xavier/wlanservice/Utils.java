@@ -1,9 +1,12 @@
-package net.stenuit.xavier.cetrelwlanservice;
+package net.stenuit.xavier.wlanservice;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.util.Log;
 
 public class Utils {
@@ -37,6 +40,16 @@ public class Utils {
 			Log.i(Utils.class.getName(),"Exception thrown",e);
 		}
 		return ret;
+	}
+	/** Gets SSID of the network
+	 * 
+	 * @return SSID of network connected, or null if not connected
+	 */
+	public static String getSSID(Context ctx)
+	{
+		WifiManager wifiManager=(WifiManager)ctx.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo wifiInfo=wifiManager.getConnectionInfo();
+		return(wifiInfo.getSSID());
 	}
 
 }

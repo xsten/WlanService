@@ -1,4 +1,4 @@
-package net.stenuit.xavier.cetrelwlanservice;
+package net.stenuit.xavier.wlanservice;
 
 import java.io.InputStream;
 import java.security.KeyStore;

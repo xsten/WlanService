@@ -1,6 +1,8 @@
-package net.stenuit.xavier.cetrelwlanservice;
+package net.stenuit.xavier.wlanservice;
 
 import java.io.File;
+
+import net.stenuit.xavier.wlanservice.R;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,9 +44,15 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 		Toast.makeText(ctx,"received broadcast:"+arg1.getAction(), Toast.LENGTH_SHORT).show();
 		*/
 		
-		PostHttpTask tsk=new PostHttpTask();
-		tsk.execute(ctx,null,getLogin(),getPassword());
-		
+		Log.d(getClass().getName(),"onReceive called");
+		// Checks connected WIFI
+		String ssid=Utils.getSSID(ctx);
+		if(ssid==null) return; // not connected
+		if(ssid.equals(ctx.getResources().getString(R.string.SupportedSSID)))
+		{
+			PostHttpTask tsk=new PostHttpTask();
+			tsk.execute(ctx,null,getLogin(),getPassword());
+		}
 	}
 
 	public void readLoginFromFile() {

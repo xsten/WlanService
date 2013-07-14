@@ -1,4 +1,4 @@
-package net.stenuit.xavier.cetrelwlanservice;
+package net.stenuit.xavier.wlanservice;
 
 import android.app.Service;
 import android.content.Intent;
@@ -26,10 +26,17 @@ public class WlanService extends Service{
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		
-		Log.i(getClass().getName(),"Started");
-	  
-		Log.i(getClass().getName(),"Leaving onStartCommand()");
-		return Service.START_NOT_STICKY;
+		Log.i(getClass().getName(),"onStartCommand() called");
+		try
+		{	
+			this.registerReceiver(myBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+		}
+		catch(Exception e){
+			Log.e(getClass().getName(), "Caught Exception", e);
+		}
+		
+		// Log.i(getClass().getName(),"Leaving onStartCommand()");
+		return Service.START_STICKY;
 	}
 	  
 	@Override
@@ -43,18 +50,21 @@ public class WlanService extends Service{
 		super.onCreate();
 		Log.i(getClass().getName(),"onCreate() called");
 
-		try
+		if(myBroadcastReceiver==null)
 		{
-			if(myBroadcastReceiver==null)
-			{
-				myBroadcastReceiver=new MyBroadcastReceiver();
-				myBroadcastReceiver.init(getFilesDir());
-				Log.d(getClass().getName(),"myBroadcastReceiver instanciated");
-			}
-			
-			this.registerReceiver(myBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+			myBroadcastReceiver=new MyBroadcastReceiver();
+			myBroadcastReceiver.init(getFilesDir());
+			Log.d(getClass().getName(),"myBroadcastReceiver instanciated");
 		}
-		catch(Exception e){}
+		
 	}
 
+	@Override
+	public void onDestroy() {
+		Log.d(getClass().getName(),"onDestroy() called");
+		this.unregisterReceiver(myBroadcastReceiver);
+		super.onDestroy();
+	}
+
+	
 }

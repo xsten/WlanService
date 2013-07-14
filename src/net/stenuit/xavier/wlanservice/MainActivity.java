@@ -1,4 +1,4 @@
-package net.stenuit.xavier.cetrelwlanservice;
+package net.stenuit.xavier.wlanservice;
 
 import net.stenuit.xavier.wlanservice.R;
 import android.app.Activity;
@@ -25,6 +25,7 @@ public class MainActivity extends Activity{
 	Intent settingsIntent=null;
 	public static Intent intent=null;
 	private MyBroadcastReceiver myBroadcastReceiver=null;
+	private Intent serviceIntent;
 	
 	public String getLogin() {
 		return myBroadcastReceiver.getLogin();
@@ -71,10 +72,10 @@ public class MainActivity extends Activity{
 		// Setting the main layout screen
 		setContentView(R.layout.mainlayout);
 		
-		Intent i=new Intent(this,WlanService.class);
-		if(startService(i)!=null)
+		serviceIntent=new Intent(this,WlanService.class);
+		if(startService(serviceIntent)!=null)
 		{ // service has been started (or was already running) --> binds to it
-			bindService(i, myServiceConnection, Context.BIND_AUTO_CREATE);
+			bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
 			// once bound we will be able to read myBroadcastReceiver
 			/*myBroadcastReceiver=WlanService.myBroadcastReceiver;
 			if(myBroadcastReceiver==null)
@@ -137,10 +138,12 @@ public class MainActivity extends Activity{
 		if(tb.isChecked())
 		{
 			Log.d(getClass().getName(),"Button checked");
+			startService(serviceIntent);
 		}
 		else
 		{
 			Log.d(getClass().getName(),"Button cleared");
+			stopService(serviceIntent);
 		}
 	}
 	@Override
@@ -161,13 +164,11 @@ public class MainActivity extends Activity{
 	}
 
 	private void registerWlan() {
-		WifiManager wifiManager=(WifiManager)getSystemService(Context.WIFI_SERVICE);
-		WifiInfo wifiInfo=wifiManager.getConnectionInfo();
-		String ssid=wifiInfo.getSSID();
+		String ssid=Utils.getSSID(this);
 		if(ssid==null) ssid="ssid was not returned";
-		if(!ssid.equals(getResources().getString(R.string.CetrelSSID)))
+		if(!ssid.equals(getResources().getString(R.string.SupportedSSID)))
 		{
-			showText("Please connect to network '"+getResources().getString(R.string.CetrelSSID)+"' first !");
+			showText("Please connect to network '"+getResources().getString(R.string.SupportedSSID)+"' first !");
 			return;
 		}
 		
