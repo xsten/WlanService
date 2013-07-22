@@ -1,6 +1,5 @@
 package net.stenuit.xavier.wlanservice;
 
-import net.stenuit.xavier.wlanservice.R;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -23,9 +22,9 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity{
 	Intent settingsIntent=null;
-	public static Intent intent=null;
 	private MyBroadcastReceiver myBroadcastReceiver=null;
 	private Intent serviceIntent;
+	private WlanService wlanService=null;
 	
 	public String getLogin() {
 		return myBroadcastReceiver.getLogin();
@@ -73,14 +72,9 @@ public class MainActivity extends Activity{
 		setContentView(R.layout.mainlayout);
 		
 		serviceIntent=new Intent(this,WlanService.class);
-		if(startService(serviceIntent)!=null)
-		{ // service has been started (or was already running) --> binds to it
-			bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
-			// once bound we will be able to read myBroadcastReceiver
-			/*myBroadcastReceiver=WlanService.myBroadcastReceiver;
-			if(myBroadcastReceiver==null)
-				Log.e(getClass().getName(),"myBroadcastListener is null !");*/
-		}
+
+		bindMyService();
+		
 		
 		// Turns on the "autoregister" button, since the broadcast receiver is active
 		ToggleButton tb=(ToggleButton)findViewById(R.id.toggleButton1);
@@ -89,15 +83,34 @@ public class MainActivity extends Activity{
 		
 		// Creates another intent for settings screen
 		settingsIntent=new Intent(this,SettingsActivity.class);
-		intent=this.getIntent();
 				
 		Log.i(getClass().getName(),"Finished onCreate");
 		// finish(); // will hide GUI
 	}
+	
+	private void bindMyService() {
+		// Starts the service if it was not yet started
+		// Without this call, leakage exceptions will be shown
+		startService(new Intent(this,WlanService.class));
+		if(serviceIntent!=null && myServiceConnection!=null)
+			bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
+	}
+	
+	private void unbindMyService()
+	{
+		if(myServiceConnection!=null)
+			unbindService(myServiceConnection);
+	}
+	
 	private ServiceConnection myServiceConnection=new ServiceConnection() {
 		
 		@Override
-		public void onServiceDisconnected(ComponentName name) {}
+		public void onServiceDisconnected(ComponentName name) {
+			Log.i(getClass().getName(),"onServiceDisconnected called");
+			// service is dying... clearing the button
+		
+			wlanService=null;
+		}
 		
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
@@ -107,20 +120,24 @@ public class MainActivity extends Activity{
 			myBroadcastReceiver=WlanService.myBroadcastReceiver;
 			if(myBroadcastReceiver==null)
 				Log.e(getClass().getName(),"myBroadcastListener is null !");
+		
+			
+			// classCastException
+			//wlanService=((WlanService.LocalBinder)service).getService();
+			//Log.i(getClass().getName(),"wlanService="+wlanService.toString());
 		}
 	};
 	@Override
 	protected void onPause() {
 		super.onPause();
 		Log.i(getClass().getName(),"onPause() called");
-//		unregisterReceiver(myBroadcastReceiver);
+
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		Log.i(getClass().getName(),"onResume() called");
-		
 	}
 
 	public void statusClicked(View v)
@@ -138,12 +155,12 @@ public class MainActivity extends Activity{
 		if(tb.isChecked())
 		{
 			Log.d(getClass().getName(),"Button checked");
-			startService(serviceIntent);
+			bindMyService();
 		}
 		else
 		{
 			Log.d(getClass().getName(),"Button cleared");
-			stopService(serviceIntent);
+			unbindMyService();
 		}
 	}
 	@Override

@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="This application will connect to Cetrel guest network and send a login/password to authenticate to this network." />
+        android:text="This application will connect to guest network and send a login/password to authenticate to this network." />
 
     <Button
         android:id="@+id/button1"

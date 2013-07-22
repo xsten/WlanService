@@ -1,11 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="103"
-    android:versionName="1.03" >
+    android:versionCode="104"
+    android:versionName="1.04" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
 	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
 	<!-- 1.03 Added permission "Internet" -->
+	<!-- 1.04 Stop also broadcastreceiver when service is stopped -->
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />

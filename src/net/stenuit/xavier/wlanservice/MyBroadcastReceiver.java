@@ -2,8 +2,6 @@ package net.stenuit.xavier.wlanservice;
 
 import java.io.File;
 
-import net.stenuit.xavier.wlanservice.R;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +50,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 		{
 			PostHttpTask tsk=new PostHttpTask();
 			tsk.execute(ctx,null,getLogin(),getPassword());
+		}
+		else
+		{ 
+			// Toast.makeText(ctx, "Connected to network "+ssid, Toast.LENGTH_SHORT).show();
 		}
 	}
 
