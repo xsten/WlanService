@@ -1,4 +1,4 @@
-package net.stenuit.xavier.wlanservice;
+package net.stenuit.xavier.wlanservice.authentiker;
 
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -24,7 +24,6 @@ import org.apache.http.params.HttpParams;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,19 +35,19 @@ import android.widget.Toast;
  * 
  * 
  */
-public class PostHttpTask extends AsyncTask<Object/*params*/, Object/*progress*/, Object/*result*/> {
-	private Context context;
+public class PostHttpTask extends Authentiker {
 	
 	@Override
 	protected Object doInBackground(Object... arg0) {
-		context=(Context)arg0[0];
 		
 		Resources res=((Context)arg0[0]).getResources();
 		KeyStore localKeyStore;
 		HttpResponse response=null;
 		// textView=(TextView)arg0[1];
-		String login=(String)arg0[2];
-		String password=(String)arg0[3];
+		// String login=(String)arg0[2];
+		// String password=(String)arg0[3];
+		String login=super.getCredentials().get("login");
+		String password=super.getCredentials().get("password");
 		
 		try
 		{
@@ -123,5 +122,11 @@ public class PostHttpTask extends AsyncTask<Object/*params*/, Object/*progress*/
 			Toast.makeText(context, "Error connecting to login server", Toast.LENGTH_SHORT).show();
 		}
 		
+	}
+
+	@Override
+	public String getPropertiesKey() {
+		
+		return "guest";
 	}
 }

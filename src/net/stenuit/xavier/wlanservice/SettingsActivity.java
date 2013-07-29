@@ -3,13 +3,13 @@ package net.stenuit.xavier.wlanservice;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Iterator;
+import java.util.Map;
 
-import net.stenuit.xavier.wlanservice.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class SettingsActivity extends Activity {
@@ -31,11 +31,13 @@ public class SettingsActivity extends Activity {
 		Log.d(getClass().getName(),"onWindowFocusChanged called");
 		if(hasFocus)
 		{
+			TextView keyView=(TextView)findViewById(R.id.propertieskey);
 			TextView loginView=(TextView)findViewById(R.id.loginField);
-			loginView.setText(Utils.readLoginFromFile(SettingsFile));
+			
+			loginView.setText(Utils.readLoginFromFile(SettingsFile).get(keyView.getText()));
 
 			TextView passwordView=(TextView)findViewById(R.id.editText2);
-			passwordView.setText(Utils.readPasswordFromFile(SettingsFile));
+			passwordView.setText(Utils.readPasswordFromFile(SettingsFile).get(keyView.getText()));
 		}
 		super.onWindowFocusChanged(hasFocus);
 	}
@@ -46,15 +48,28 @@ public class SettingsActivity extends Activity {
 		
 		try
 		{
-			BufferedWriter writer=new BufferedWriter(new FileWriter(SettingsFile,false));
+
+			 // Utils.clearFile(SettingsFile);
 			
-			String login=((TextView)findViewById(R.id.loginField)).getText().toString();
-			writer.write(login);
-			writer.write("\n");
-			String pwd=((EditText)findViewById(R.id.editText2)).getText().toString();
-			Log.i(getClass().getName(),"Writing to file : "+login+","+pwd);
-			writer.write(pwd);
-			writer.write("\n");
+			Map<String,String> loginmap=Utils.readLoginFromFile(SettingsFile);
+			loginmap.put(((TextView)findViewById(R.id.propertieskey)).getText().toString(), ((TextView)findViewById(R.id.loginField)).getText().toString());
+			Map<String,String> passwdmap=Utils.readPasswordFromFile(SettingsFile);
+			passwdmap.put(((TextView)findViewById(R.id.propertieskey)).getText().toString(),((TextView)findViewById(R.id.editText2)).getText().toString());
+
+			BufferedWriter writer=new BufferedWriter(new FileWriter(SettingsFile,false));
+
+			Iterator<String> i=loginmap.keySet().iterator();
+			while(i.hasNext())
+			{
+				String k=i.next();
+				String login=loginmap.get(k);
+				writer.write(k+".login="+login);
+				writer.write("\n");
+				String pwd=passwdmap.get(k);
+				writer.write(k+".password="+pwd);
+				Log.i(getClass().getName(),"Writing to file : "+login+","+pwd);
+				writer.write("\n");
+			}
 			writer.flush();
 			writer.close();
 			

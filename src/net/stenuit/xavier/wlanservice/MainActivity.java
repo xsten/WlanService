@@ -26,10 +26,12 @@ public class MainActivity extends Activity{
 	private Intent serviceIntent;
 	private WlanService wlanService=null;
 	
+	/*
 	public String getLogin() {
 		return myBroadcastReceiver.getLogin();
 	}
-
+	*/
+	
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
@@ -40,7 +42,7 @@ public class MainActivity extends Activity{
 			
 		}
 	}
-
+/*
 	public void setLogin(String login) {
 		myBroadcastReceiver.setLogin(login);
 	}
@@ -52,7 +54,7 @@ public class MainActivity extends Activity{
 	public void setPassword(String password) {
 		myBroadcastReceiver.setPassword(password);
 	}
-
+*/
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		/*
@@ -181,6 +183,8 @@ public class MainActivity extends Activity{
 	}
 
 	private void registerWlan() {
+		showText("TODO");
+		/*
 		String ssid=Utils.getSSID(this);
 		if(ssid==null) ssid="ssid was not returned";
 		if(!ssid.equals(getResources().getString(R.string.SupportedSSID)))
@@ -191,6 +195,7 @@ public class MainActivity extends Activity{
 		
 		PostHttpTask tsk=new PostHttpTask();
 		tsk.execute(getApplicationContext(),null,myBroadcastReceiver.getLogin(),myBroadcastReceiver.getPassword());
+		*/
 	}
 
 	private void checkWlanStatus() {
@@ -220,10 +225,12 @@ public class MainActivity extends Activity{
 			String ssid=wifiInfo.getSSID();
 			toshow+=("SSID:"+ssid+"\n");
 		}
+		/*
 		if(getPassword()==null)
 			toshow+="Password is not set - please set your login/password using menu\n";
 		else
 			toshow+="Password is set for user "+getLogin();
+		*/
 		showText(toshow);
 	}
 

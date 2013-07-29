@@ -1,14 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="104"
-    android:versionName="1.04" >
+    android:versionCode="200"
+    android:versionName="2.00" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
 	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
 	<!-- 1.03 Added permission "Internet" -->
 	<!-- 1.04 Stop also broadcastreceiver when service is stopped -->
+	<!-- 2.00 Works with FON_BELGACOM and guest -->
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="17" />
         <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
