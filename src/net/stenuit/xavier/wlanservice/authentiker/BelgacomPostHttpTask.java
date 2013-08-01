@@ -30,7 +30,6 @@ import org.apache.http.params.HttpParams;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
-import android.widget.Toast;
 
 public class BelgacomPostHttpTask extends Authentiker {
 	public BelgacomPostHttpTask()
@@ -160,7 +159,7 @@ public class BelgacomPostHttpTask extends Authentiker {
 	}
 	@Override
 	public String getPropertiesKey() {
-		return "fon";
+		return "FON_BELGACOM";
 	}
 
 }

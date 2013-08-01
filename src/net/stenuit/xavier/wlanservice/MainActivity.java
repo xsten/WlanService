@@ -24,7 +24,6 @@ public class MainActivity extends Activity{
 	Intent settingsIntent=null;
 	private MyBroadcastReceiver myBroadcastReceiver=null;
 	private Intent serviceIntent;
-	private WlanService wlanService=null;
 	
 	/*
 	public String getLogin() {
@@ -109,9 +108,6 @@ public class MainActivity extends Activity{
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			Log.i(getClass().getName(),"onServiceDisconnected called");
-			// service is dying... clearing the button
-		
-			wlanService=null;
 		}
 		
 		@Override

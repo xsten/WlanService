@@ -10,6 +10,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class SettingsActivity extends Activity {
@@ -22,6 +24,11 @@ public class SettingsActivity extends Activity {
 		File homedir=getFilesDir();
 		Log.d(getClass().getName(), "file directory is "+homedir.getAbsolutePath());
 		SettingsFile=new File(homedir,getResources().getString(R.string.filename));
+		
+		Spinner s=(Spinner)findViewById(R.id.propertieskey);
+		
+		ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.modules, R.layout.spinnerlayout);
+		s.setAdapter(adapter);
 	}
 
 
@@ -31,13 +38,13 @@ public class SettingsActivity extends Activity {
 		Log.d(getClass().getName(),"onWindowFocusChanged called");
 		if(hasFocus)
 		{
-			TextView keyView=(TextView)findViewById(R.id.propertieskey);
+			Spinner keyView=(Spinner)findViewById(R.id.propertieskey);
 			TextView loginView=(TextView)findViewById(R.id.loginField);
 			
-			loginView.setText(Utils.readLoginFromFile(SettingsFile).get(keyView.getText()));
+			loginView.setText(Utils.readLoginFromFile(SettingsFile).get(keyView.getSelectedItem()));
 
 			TextView passwordView=(TextView)findViewById(R.id.editText2);
-			passwordView.setText(Utils.readPasswordFromFile(SettingsFile).get(keyView.getText()));
+			passwordView.setText(Utils.readPasswordFromFile(SettingsFile).get(keyView.getSelectedItem()));
 		}
 		super.onWindowFocusChanged(hasFocus);
 	}
@@ -52,9 +59,9 @@ public class SettingsActivity extends Activity {
 			 // Utils.clearFile(SettingsFile);
 			
 			Map<String,String> loginmap=Utils.readLoginFromFile(SettingsFile);
-			loginmap.put(((TextView)findViewById(R.id.propertieskey)).getText().toString(), ((TextView)findViewById(R.id.loginField)).getText().toString());
+			loginmap.put(((Spinner)findViewById(R.id.propertieskey)).getSelectedItem().toString(), ((TextView)findViewById(R.id.loginField)).getText().toString());
 			Map<String,String> passwdmap=Utils.readPasswordFromFile(SettingsFile);
-			passwdmap.put(((TextView)findViewById(R.id.propertieskey)).getText().toString(),((TextView)findViewById(R.id.editText2)).getText().toString());
+			passwdmap.put(((Spinner)findViewById(R.id.propertieskey)).getSelectedItem().toString(),((TextView)findViewById(R.id.editText2)).getText().toString());
 
 			BufferedWriter writer=new BufferedWriter(new FileWriter(SettingsFile,false));
 

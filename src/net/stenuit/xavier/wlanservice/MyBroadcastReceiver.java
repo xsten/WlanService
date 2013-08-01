@@ -55,7 +55,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 		Authentiker authentiker=AuthentikerFactory.getInstance().getAuthentiker(ssid);
 		if(authentiker==null)
 		{
-			Toast.makeText(ctx,"Connected to "+ssid+", not sending credentials",Toast.LENGTH_SHORT).show();
+			// Toast.makeText(ctx,"Connected to "+ssid+", not sending credentials",Toast.LENGTH_SHORT).show();
 		}
 		else
 		{
