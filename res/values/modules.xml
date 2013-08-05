@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="modules">
+		<item>FON_BELGACOM</item>
         <item>guest</item>
-        <item>FON_BELGACOM</item>
     </string-array>
 </resources>

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/wlanservice_back"
+    android:background="@drawable/wlanserviceback"
      >
 
     <ToggleButton
@@ -50,5 +50,41 @@
         android:layout_marginRight="24dp"
         android:onClick="registerClicked"
         android:text="Register" />
+<!-- 
+    <ToggleButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/properties"
+        android:text="DeleteMe" />
+ -->
+<!--
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" >
 
+        <ToggleButton
+            android:id="@+id/toggleButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ToggleButton" />
+
+        <Button
+        android:id="@+id/button3"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button2"
+        android:layout_alignRight="@+id/toggleButton1"
+        android:height="20dp"
+        android:background="@drawable/properties"
+        android:text="Button" />
+    </LinearLayout>
+-->
+
+ 
 </RelativeLayout>
