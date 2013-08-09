@@ -58,10 +58,14 @@ public class SettingsActivity extends Activity {
 
 			 // Utils.clearFile(SettingsFile);
 			
+			String newkey=((Spinner)findViewById(R.id.propertieskey)).getSelectedItem().toString();
+			if(newkey.contains(".")) // removes the ".com"
+				newkey=newkey.substring(0,newkey.indexOf('.'));
+			
 			Map<String,String> loginmap=Utils.readLoginFromFile(SettingsFile);
-			loginmap.put(((Spinner)findViewById(R.id.propertieskey)).getSelectedItem().toString(), ((TextView)findViewById(R.id.loginField)).getText().toString());
+			loginmap.put(newkey, ((TextView)findViewById(R.id.loginField)).getText().toString());
 			Map<String,String> passwdmap=Utils.readPasswordFromFile(SettingsFile);
-			passwdmap.put(((Spinner)findViewById(R.id.propertieskey)).getSelectedItem().toString(),((TextView)findViewById(R.id.editText2)).getText().toString());
+			passwdmap.put(newkey,((TextView)findViewById(R.id.editText2)).getText().toString());
 
 			BufferedWriter writer=new BufferedWriter(new FileWriter(SettingsFile,false));
 

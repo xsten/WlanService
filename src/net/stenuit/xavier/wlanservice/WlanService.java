@@ -14,9 +14,9 @@ import android.util.Log;
 public class WlanService extends Service{
 	
 	public static MyBroadcastReceiver myBroadcastReceiver=null;
-	
 	public final Messenger mMessenger = new Messenger(new IncomingHandler()); // Target we publish for clients to send messages to IncomingHandler.
-    static class IncomingHandler extends Handler { // Handler of incoming messages from clients.
+
+	static class IncomingHandler extends Handler { // Handler of incoming messages from clients.
          @Override
         public void handleMessage(Message msg) {
         	 Log.i(getClass().getName(),"Message received : "+msg.toString());
@@ -31,6 +31,7 @@ public class WlanService extends Service{
 			return WlanService.this;
 		}
 	}
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
@@ -38,8 +39,7 @@ public class WlanService extends Service{
 		Log.i(getClass().getName(),"onStartCommand() called");
 	
 		activateBroadcastReceiver();
-		
-		// Log.i(getClass().getName(),"Leaving onStartCommand()");
+	
 		return Service.START_STICKY;
 	}
 	  
@@ -53,7 +53,6 @@ public class WlanService extends Service{
 	public void onCreate() {
 		super.onCreate();
 		Log.i(getClass().getName(),"onCreate() called");
-
 		activateBroadcastReceiver();
 		
 	}

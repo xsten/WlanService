@@ -2,6 +2,7 @@
 <resources>
     <string-array name="modules">
 		<item>FON_BELGACOM</item>
+		<item>free-hotspot.com</item>
         <item>guest</item>
     </string-array>
 </resources>

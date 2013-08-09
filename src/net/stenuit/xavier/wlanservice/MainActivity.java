@@ -41,19 +41,7 @@ public class MainActivity extends Activity{
 			
 		}
 	}
-/*
-	public void setLogin(String login) {
-		myBroadcastReceiver.setLogin(login);
-	}
 
-	public String getPassword() {
-		return myBroadcastReceiver.getPassword();
-	}
-
-	public void setPassword(String password) {
-		myBroadcastReceiver.setPassword(password);
-	}
-*/
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		/*
@@ -86,9 +74,20 @@ public class MainActivity extends Activity{
 		settingsIntent=new Intent(this,SettingsActivity.class);
 				
 		Log.i(getClass().getName(),"Finished onCreate");
+		
 		// finish(); // will hide GUI
 	}
 	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		// avoids leakage : stops referencing everything that references me !
+		settingsIntent=null; 
+		serviceIntent=null;
+		unbindService(myServiceConnection);
+		myServiceConnection=null;
+		
+	}
 	private void bindMyService() {
 		// Starts the service if it was not yet started
 		// Without this call, leakage exceptions will be shown

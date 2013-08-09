@@ -22,6 +22,7 @@ public class AuthentikerFactory {
 		Log.i(getClass().getName(),"Looking for task for ssid : "+ssid);
 		if("guest".equals(ssid))return new PostHttpTask();
 		if("FON_BELGACOM".equals(ssid))return new BelgacomPostHttpTask();
+		if("free-hotspot.com".equals(ssid))return new FreeHotspotDotComAuthentiker();
 		Log.i(getClass().getName(),"Not found");
 		return null;
 	}

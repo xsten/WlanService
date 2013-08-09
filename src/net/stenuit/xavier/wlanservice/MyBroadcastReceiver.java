@@ -18,6 +18,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	public static File SettingsFile=null;
 	
 	public String getLogin(String key) {
+		if(key.contains(".")) // removes the trailing .com
+			key=key.substring(0,key.indexOf('.'));
 		return login.get(key);
 	}
 
@@ -26,6 +28,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	}
 
 	public String getPassword(String key) {
+		if(key.contains(".")) // removes the trailing .com
+			key=key.substring(0,key.indexOf('.'));
 		return password.get(key);
 	}
 
@@ -41,12 +45,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	@Override
-	public void onReceive(Context ctx, Intent intent) {
-		/*
-		Log.i(getClass().getName(),"received broadcast, intent:"+arg1.getAction());
-		Toast.makeText(ctx,"received broadcast:"+arg1.getAction(), Toast.LENGTH_SHORT).show();
-		*/
-		
+	public void onReceive(Context ctx, Intent intent) {		
 		Log.d(getClass().getName(),"onReceive called");
 		// Checks connected WIFI
 		String ssid=Utils.getSSID(ctx);
@@ -70,25 +69,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 			authentiker.setCredentials(credentials);
 			authentiker.execute(ctx);
 			
-			// Todo - change the getLogin() and getPassword() - use getCredentials() instead
 		}
-		/*
-		if(ssid.equals(ctx.getResources().getString(R.string.SupportedSSID)))
-		{
-			PostHttpTask tsk=new PostHttpTask();
-			tsk.execute(ctx,null,getLogin(),getPassword());
-		}
-		if(ssid.equals("FON_BELGACOM"))
-		{
-			Toast.makeText(ctx, "FON_BELGACOM detected",Toast.LENGTH_SHORT).show();
-			BelgacomPostHttpTask tsk=new BelgacomPostHttpTask();
-			tsk.execute(ctx);
-		}
-		else
-		{ 
-			// Toast.makeText(ctx, "Connected to network "+ssid, Toast.LENGTH_SHORT).show();
-		}
-		*/
 	}
 
 	public void readLoginFromFile() {
