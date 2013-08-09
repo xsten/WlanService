@@ -25,6 +25,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
+import android.widget.Toast;
 
 @SuppressLint("DefaultLocale")
 public class FreeHotspotDotComAuthentiker extends Authentiker {
@@ -44,6 +45,7 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 		super.doInBackground(arg0);
 		
 		Resources res=((Context)arg0[0]).getResources();
+		Context ctx=(Context)arg0[0];
 		KeyStore localKeyStore;
 		//String login=super.getCredentials().get("login");
 		//String password=super.getCredentials().get("password");
@@ -145,10 +147,13 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 			}
 			br.close();
 			is.close();
+			
+			Toast.makeText(ctx, "Connected to "+getPropertiesKey(),Toast.LENGTH_SHORT).show();
 		}
 		catch(Exception e)
 		{
 			Log.e(getClass().getName(),"Exception thrown",e);
+			Toast.makeText(ctx, "Problem connecting to "+getPropertiesKey(), Toast.LENGTH_SHORT).show();
 		}
 		
 		return null;

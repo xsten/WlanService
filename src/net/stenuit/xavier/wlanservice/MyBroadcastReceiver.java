@@ -59,7 +59,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 		else
 		{
 			authentiker.setContext(ctx); // initialize properly
-			Toast.makeText(ctx, "Connected to "+ssid,Toast.LENGTH_SHORT).show();
+			
 			Map<String,String>logins=Utils.readLoginFromFile(SettingsFile);
 			Map<String,String>passwords=Utils.readPasswordFromFile(SettingsFile);
 			
