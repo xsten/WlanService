@@ -9,7 +9,7 @@
 	<!-- 1.04 Stop also broadcastreceiver when service is stopped -->
 	<!-- 2.00 Works with FON_BELGACOM and guest -->
 	<!-- 2.01 Better GUI for module selection, background images -->
-	<!-- 2.02 -->
+	<!-- 2.02 Added free-hotspot.com + improved (?) gui-->
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="17" />
