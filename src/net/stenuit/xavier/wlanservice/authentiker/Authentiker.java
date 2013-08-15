@@ -2,8 +2,14 @@ package net.stenuit.xavier.wlanservice.authentiker;
 
 import java.util.Map;
 
+import net.stenuit.xavier.wlanservice.R;
+
+import org.apache.http.HttpResponse;
+
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 public abstract class Authentiker extends AsyncTask<Object/*params*/, Object/*progress*/, Object/*result*/> {
 	private Map<String, String> credentials;
@@ -39,5 +45,29 @@ public abstract class Authentiker extends AsyncTask<Object/*params*/, Object/*pr
 	public void setContext(Context c)
 	{
 		context=c;
+	}
+	
+	@Override
+	protected void onPostExecute(Object result) {
+		if(result==null)
+			result="null";
+		
+		Log.d(getClass().getName(),"On Post execute, argument is a "+result.getClass().getName());
+		
+		if(result instanceof HttpResponse)
+		{
+			HttpResponse resp=(HttpResponse)result;
+			Log.d(getClass().getName(),"Status code : "+resp.getStatusLine().getStatusCode()+"\n");
+			// String txt=context.getResources().getConfiguration().locale.
+			if(resp.getStatusLine().getStatusCode()==200)
+			{
+				Toast.makeText(context, context.getString(R.string.registeredon)+getPropertiesKey(), Toast.LENGTH_SHORT).show();
+			}
+		}
+		else
+		{
+			// Toast.makeText(context, "Error connecting to login server", Toast.LENGTH_SHORT).show();
+		}
+		
 	}
 }

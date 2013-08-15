@@ -226,6 +226,14 @@ public class MainActivity extends Activity{
 		else
 			toshow+="Password is set for user "+getLogin();
 		*/
+		
+		// TODO : prints supported SSD (read from R.array.modules)
+		toshow+=getResources().getString(R.string.supportedModules)+"\n";
+		String[] modules=this.getResources().getStringArray(R.array.modules);
+		for(String module : modules)
+		{
+			toshow+=module+"\n";
+		}
 		showText(toshow);
 	}
 

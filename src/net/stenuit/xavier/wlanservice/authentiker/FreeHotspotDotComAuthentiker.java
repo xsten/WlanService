@@ -3,29 +3,32 @@ package net.stenuit.xavier.wlanservice.authentiker;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Locale;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import net.stenuit.xavier.wlanservice.R;
 import net.stenuit.xavier.wlanservice.Utils;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
-import android.widget.Toast;
 
 @SuppressLint("DefaultLocale")
 public class FreeHotspotDotComAuthentiker extends Authentiker {
@@ -36,16 +39,17 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 		
 		Log.i(getClass().getName(),"Changing cookie manager policy");
 		
-		CookieHandler.setDefault(new CookieManager(null,CookiePolicy.ACCEPT_ALL));
+		// CookieHandler.setDefault(new CookieManager(null,CookiePolicy.ACCEPT_ALL));
 	}
 	
 	@SuppressLint("DefaultLocale")
 	@Override
 	protected Object doInBackground(Object... arg0) {
 		super.doInBackground(arg0);
+
+		HttpResponse response=null;
 		
 		Resources res=((Context)arg0[0]).getResources();
-		Context ctx=(Context)arg0[0];
 		KeyStore localKeyStore;
 		//String login=super.getCredentials().get("login");
 		//String password=super.getCredentials().get("password");
@@ -61,8 +65,17 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 			org.apache.http.conn.ssl.SSLSocketFactory sslSocketFactory = new org.apache.http.conn.ssl.SSLSocketFactory(localKeyStore);
 			schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
 
+			HttpParams params = new BasicHttpParams();
+			ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
+
+			DefaultHttpClient client = new DefaultHttpClient(cm, params);
+			BasicCookieStore cookieStore=new BasicCookieStore();
+			client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
+			client.setCookieStore(cookieStore);
+			
 			// Follows all redirections !
-			String redirectURL="http://www.herm25.com/src/login.php"; // starting point
+			String redirectURL="http://www.w3.org"; // starting point
+			boolean redirected=false;
 			
 			
 			/* The final goal is to find the following parameters
@@ -88,21 +101,15 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 			{
 				String s;
 				
-				URL myurl=new URL(redirectURL);
-				HttpURLConnection.setFollowRedirects(false);
-				HttpURLConnection cnx=(HttpURLConnection)(myurl).openConnection();
+				HttpGet httpget=new HttpGet(redirectURL);
+				response=client.execute(httpget);
+				HttpEntity entity=response.getEntity();
 				
-				
-				InputStream is=cnx.getInputStream(); // this starts effectively the connexion
+				Log.d(getClass().getName(),"Login form get :"+response.getStatusLine() );
+								
+				InputStream is=entity.getContent();
 				BufferedReader br=new BufferedReader(new InputStreamReader(is));
-				// Yes, there are cookies, but nothing is sent through POST - so why bother ?
-				// if(cnx.getHeaderField("Set-Cookie")!=null)
-				//	cookies=cnx.getHeaderField("Set-Cookie");
-				
-				
-				// freehotspot.com works with lot of redirects in the form of META HTTP-EQUIV="REFRESH"
-				// The last destination is a <form> (get) pointing to an https site, with plenty of hidden data
-				// We collect the hidden data on the way, and build a valid "get" URL to call
+			
 				s=br.readLine();
 				redirectURL=null;
 				while(s!=null)
@@ -110,7 +117,9 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 					Log.d(getClass().getName(),s);
 					if(s.toUpperCase(Locale.ENGLISH).contains("<META HTTP-EQUIV=\"REFRESH\""))
 					{
-						redirectURL=s.substring(s.indexOf("URL=")+4,s.length()-2);
+						redirected=true;
+						redirectURL=s.substring(s.indexOf("URL=")+4,s.length()-2);		
+						redirectURL=redirectURL.replaceAll("&amp;", "&");
 						break;
 					}
 					if(s.contains("<input type=\"hidden\" name="))
@@ -122,8 +131,14 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 					s=br.readLine();
 				}
 				br.close();
-				cnx.disconnect();
+				if(entity!=null)entity.consumeContent();
 			}			
+			
+			if(!redirected)
+			{
+				Log.d(getClass().getName(),"Not redirected - we are already logged in !");
+				return null;
+			}
 			
 			Log.d(getClass().getName(),"Reached login page ! - just need to post OK");
 			String s="https://has.anacapa.biz/cgi-bin/bld_um_rel.pm";
@@ -135,28 +150,31 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 			s.replaceFirst("&", "?");
 			
 			Log.d(getClass().getName(),"Now logging in to :"+s);
-			URL url=new URL(s);
-			HttpsURLConnection cnx=(HttpsURLConnection)url.openConnection();
-			InputStream is=cnx.getInputStream();
+		
+			HttpGet request=new HttpGet(s);			
+			response=client.execute(request);
+			HttpEntity entity=response.getEntity();
+			InputStream is=entity.getContent();
 			BufferedReader br=new BufferedReader(new InputStreamReader(is));
-			
 			s=br.readLine();
 			while(s!=null)
 			{
 				Log.d(getClass().getName(),s);
+				s=br.readLine();
 			}
 			br.close();
 			is.close();
+			client.getConnectionManager().shutdown();
 			
-			Toast.makeText(ctx, "Connected to "+getPropertiesKey(),Toast.LENGTH_SHORT).show();
 		}
 		catch(Exception e)
 		{
 			Log.e(getClass().getName(),"Exception thrown",e);
-			Toast.makeText(ctx, "Problem connecting to "+getPropertiesKey(), Toast.LENGTH_SHORT).show();
+			// Toast.makeText(ctx, "Problem connecting to "+getPropertiesKey(), Toast.LENGTH_SHORT).show();
 		}
 		
-		return null;
+		// TODO provide an httpresponse
+		return response;
 	}
 
 	@Override

@@ -25,7 +25,6 @@ import org.apache.http.params.HttpParams;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * 
@@ -94,8 +93,7 @@ public class PostHttpTask extends Authentiker {
 
 		
 			response=client.execute(post);
-			// textView.append("Status code : "+response.getStatusLine().getStatusCode());
-		
+			
 		}
 		catch(Exception e)
 		{
@@ -104,25 +102,6 @@ public class PostHttpTask extends Authentiker {
 		return response;
 	}
 
-	@Override
-	protected void onPostExecute(Object result) {
-		if(result==null)
-			result="null";
-		
-		Log.d(getClass().getName(),"On Post execute, argument is a "+result.getClass().getName());
-		
-		if(result instanceof HttpResponse)
-		{
-			HttpResponse resp=(HttpResponse)result;
-			Log.d(getClass().getName(),"Status code : "+resp.getStatusLine().getStatusCode()+"\n");
-			Toast.makeText(context, "Got response from login server : "+resp.getStatusLine().getStatusCode(), Toast.LENGTH_SHORT).show();
-		}
-		else
-		{
-			Toast.makeText(context, "Error connecting to login server", Toast.LENGTH_SHORT).show();
-		}
-		
-	}
 
 	@Override
 	public String getPropertiesKey() {

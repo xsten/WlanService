@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:ems="10" 
         android:singleLine="true"
+        
         >
 
         <requestFocus />
@@ -63,7 +64,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:onClick="OkButtonClicked"
-            android:text="OK" />
+            android:text="@string/OK" />
 
         <Button
             android:id="@+id/cancelButton"
@@ -72,7 +73,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:onClick="CancelButtonClicked"
-            android:text="Cancel" />
+            android:text="@string/Cancel" />
 
     </RelativeLayout>
 

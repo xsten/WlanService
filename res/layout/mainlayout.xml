@@ -2,48 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/wlanserviceback"
-     >
+    android:background="@drawable/wlanserviceback" >
 
-    <TextView
+        <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true" />
-
+        android:layout_below="@+id/textView1" />
+    
+        
     <TextView
         android:id="@+id/introText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="This application runs in background.\n\n
-When the device connects to a known network, the application registers automatically,
-sending required credentials and approving user agreements for you.\n\n
-Please use menu/settings to set passwords.\n\n
-You can disable the service with the &quot;Autoregister&quot; toggle button" />
+        android:text="@string/help" />
 
     <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/toggleButton1"
-        android:layout_marginTop="12dp"
         android:onClick="statusClicked"
-        android:text="Status" />
+        android:text="@string/Status" />
 
     <ToggleButton
         android:id="@+id/toggleButton1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/introText"
-        android:layout_marginTop="72dp"
         android:onClick="autoClicked"
-        android:textOff="AutoRegister OFF"
-        android:textOn="AutoRegister ON" />
- 
+        android:textOff="@string/AutoRegisterOff"
+        android:textOn="@string/AutoRegisterOn" />
+
+
 </RelativeLayout>

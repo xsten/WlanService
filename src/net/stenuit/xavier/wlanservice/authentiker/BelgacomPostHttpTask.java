@@ -30,7 +30,6 @@ import org.apache.http.params.HttpParams;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
-import android.widget.Toast;
 
 public class BelgacomPostHttpTask extends Authentiker {
 	public BelgacomPostHttpTask()
@@ -48,7 +47,6 @@ public class BelgacomPostHttpTask extends Authentiker {
 		super.doInBackground(arg0);
 		
 		Resources res=((Context)arg0[0]).getResources();
-		Context ctx=(Context)arg0[0];
 		KeyStore localKeyStore;
 		HttpResponse response=null;
 		// textView=(TextView)arg0[1];
@@ -86,7 +84,6 @@ public class BelgacomPostHttpTask extends Authentiker {
 				
 				{
 					Log.i(getClass().getName(),"No redirection");
-				
 					return null; // no need to connect.
 				}
 				else
@@ -151,13 +148,11 @@ public class BelgacomPostHttpTask extends Authentiker {
 //				}
 			
 				Log.i(getClass().getName(),"Response : "+response.getStatusLine().getStatusCode());
-				Toast.makeText(ctx, "Connected to "+getPropertiesKey()+",response="+response.getStatusLine().getStatusCode(),Toast.LENGTH_SHORT).show();
 			}
 		}
 		catch(Exception e)
 		{
 			Log.e(getClass().getName(),"Exception thrown",e);
-			Toast.makeText(ctx, "Problem connecting to "+getPropertiesKey(), Toast.LENGTH_SHORT).show();
 		}
 		return response;
 	}
