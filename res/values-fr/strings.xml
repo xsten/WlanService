@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">WlanService</string>
+    <string name="filename">settings.dat</string>
+    <string name="Login">Utilisateur</string>
+    <string name="Password">Mot de passe</string>
+	<string name="Settings">Paramètres</string>
+	<string name="Status">Statut</string>
+	<string name="AutoRegisterOn">Autoenregistrement ACTIF</string>
+	<string name="AutoRegisterOff">Autoenregistrement INACTIF</string>
+	<string name="setlogin">Menu/Mot de passe</string>
+	<string name="OK">OK</string>
+	<string name="Cancel">Annuler</string>
+	<string name="registeredon">Enregistré sur</string>
+	<string name="supportedModules">Réseaux supportés:</string>
+	<string name="help">"L'application tourne en tâche de fond.\n
+Lorsque vous accrochez un réseau supporté, l'application s'enregistre automatiquement sur le réseau,
+soit en envoyant votre mot de passe, soit en approuvant les conditions d'utilisation pour vous.\n
+Utilisez le menu Login/Mot de passe pour enregistrer votre mot de passe.\n
+Utilisez \"Statut\" to voir tous les réseaux supportés.\n
+Vous pouvez activer/désactiver le service en sélectionnant/désélectionnant le bouton \"Autoenregistrement\""</string>
+</resources>
