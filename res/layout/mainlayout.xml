@@ -4,12 +4,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/wlanserviceback" >
 
-        <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1" />
     
         
     <TextView
@@ -36,5 +30,11 @@
         android:textOff="@string/AutoRegisterOff"
         android:textOn="@string/AutoRegisterOn" />
 
-
+        <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/button1" />
+    
 </RelativeLayout>

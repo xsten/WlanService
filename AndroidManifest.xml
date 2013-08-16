@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="202"
-    android:versionName="2.02" >
+    android:versionCode="204"
+    android:versionName="2.04" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
 	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
@@ -11,6 +11,7 @@
 	<!-- 2.01 Better GUI for module selection, background images -->
 	<!-- 2.02 Added free-hotspot.com + improved (?) gui-->
 	<!-- 2.03 Only leaves belgacom FON -->
+	<!-- 2.04 Changes for release on playstore -->
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="17" />

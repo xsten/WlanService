@@ -2,10 +2,11 @@
 <resources>
     <string-array name="modules" translatable="false">
 		<item>FON_BELGACOM</item>
+		<item>guest</item>
 		<!-- Disabling free-hotspot.com and guest for official version -->
 		<!-- 
 		<item>free-hotspot.com</item>
-        <item>guest</item>
+        
          -->
     </string-array>
 </resources>
