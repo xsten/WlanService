@@ -72,7 +72,7 @@ public class BelgacomPostHttpTask extends Authentiker {
 			// textView.append("creating post object");
 			                           
 			// Check whether we are redirected
-			URL url=new URL("http://www.herm25.com/src/login.php");
+			URL url=new URL("http://www.w3.org");
 			HttpURLConnection.setFollowRedirects(false); // Don't trust java redirects - it fails when protocol switches from http to https
 			HttpURLConnection cnx=(HttpURLConnection)(url).openConnection();
 			boolean mustLogin=false;
