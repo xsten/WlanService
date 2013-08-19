@@ -7,7 +7,7 @@
 	<string name="Status">Statut</string>
 	<string name="AutoRegisterOn">Autoenregistrement ACTIF</string>
 	<string name="AutoRegisterOff">Autoenregistrement INACTIF</string>
-	<string name="setlogin">Menu/Mot de passe</string>
+	<string name="setlogin">Login/Mot de passe</string>
 	<string name="OK">OK</string>
 	<string name="Cancel">Annuler</string>
 	<string name="registeredon">"Enregistré sur "</string>
