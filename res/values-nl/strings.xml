@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Belgacom FON Autologin</string>
+    <string name="filename">settings.dat</string>
+    <string name="Login">Gebruiker</string>
+    <string name="Password">Wachtwoord</string>
+	<string name="Settings">Instellingen</string>
+	<string name="Status">Status</string>
+	<string name="AutoRegisterOn">Zelfregistratie ON</string>
+	<string name="AutoRegisterOff">Zelfregistratie OFF</string>
+	<string name="setlogin">Gebruiker/Wachtwoord</string>
+	<string name="OK">OK</string>
+	<string name="Cancel">Annuleren</string>
+	<string name="registeredon">"Geregistreerd op "</string>
+	<string name="supportedModules">Ondersteunde netwerken:</string>
+	<string name="help">"De applicatie draait op de achtergrond. \n
+Zodra u een ondersteund netwerk aansluit, stuurt de applicatie automatisch gebruikersnaam/wachtwoord
+ of de goedkeuring van de gebruiksvoorwaarden voor u. \n
+Gebruik Gebruiker/Wachtwoord menu om uw wachtwoord op te slaan. \n
+Gebruik \"status\" om alle ondersteund netwerken te zien. \n
+U kunt de service in/uitschakelen door het selecteren/deselecteren van de 
+\"zelfregistratie\" knop"</string>
+</resources>
