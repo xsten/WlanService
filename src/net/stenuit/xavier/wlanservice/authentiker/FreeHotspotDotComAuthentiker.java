@@ -3,6 +3,7 @@ package net.stenuit.xavier.wlanservice.authentiker;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Locale;
@@ -73,8 +74,10 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 			client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BEST_MATCH);
 			client.setCookieStore(cookieStore);
 			
+			client.setRedirectHandler(new DontFollowRedirectHandler());
+			
 			// Follows all redirections !
-			String redirectURL="http://www.w3.org"; // starting point
+			String redirectURL="http://home.bt.com"; // starting point
 			boolean redirected=false;
 			
 			
@@ -103,6 +106,27 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 				
 				HttpGet httpget=new HttpGet(redirectURL);
 				response=client.execute(httpget);
+				
+				if(response.getStatusLine().getStatusCode()==302)
+				{
+					Log.d(getClass().getName(),"Redirected !!!");
+					redirected=true;
+					String work=response.getHeaders("Location")[0].getValue();
+					if(!work.contains("parms="))
+					{
+						redirectURL=work;
+					}
+					else
+					{
+						String part1=work.substring(0,work.indexOf("parms="));
+						// part2 is "parms="
+						String part3=URLEncoder.encode(work.substring(work.indexOf("parms=")+6));
+						redirectURL=part1+"parms="+part3;
+						Log.d(getClass().getName(),"redirection with reencoded params : "+redirectURL);
+					}
+					continue;
+				}
+				
 				HttpEntity entity=response.getEntity();
 				
 				Log.d(getClass().getName(),"Login form get :"+response.getStatusLine() );
@@ -124,8 +148,11 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 					}
 					if(s.contains("<input type=\"hidden\" name="))
 					{
-						String[] parsed=Utils.parseInputLine(s);
-						htmlInputs.put(parsed[0],parsed[1]);
+						if(!s.contains("sclot")&&!s.contains("scValue"))
+						{
+							String[] parsed=Utils.parseInputLine(s);
+							htmlInputs.put(parsed[0],parsed[1]);
+						}
 					}
 					
 					s=br.readLine();
@@ -147,7 +174,7 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 				s+="&";
 				s+=k+"="+htmlInputs.get(k);
 			}
-			s.replaceFirst("&", "?");
+			s=s.replaceFirst("&", "?");
 			
 			Log.d(getClass().getName(),"Now logging in to :"+s);
 		

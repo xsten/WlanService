@@ -1,6 +1,8 @@
 package net.stenuit.xavier.wlanservice.authentiker;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -117,7 +119,7 @@ public class BelgacomPostHttpTask extends Authentiker {
 //					}
 					
 					cookies=cnx.getHeaderField("Set-Cookie");
-					Log.i(getClass().getName(),"Set-Cookie after redirect : "+cookies); // YESS !!!!!
+					Log.i(getClass().getName(),"Set-Cookie after redirect : "+cookies);
 				}
 				
 			}
@@ -139,15 +141,24 @@ public class BelgacomPostHttpTask extends Authentiker {
 				post.addHeader("Cookie",cookies); // With cookies, we get a positive answer... Otherwise 404 
 			
 				response=client.execute(post);
-//				BufferedReader br=new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-//				String line=br.readLine();
-//				while(line!=null)
-//				{
-//					Log.i(getClass().getName(),line);
-//					line=br.readLine();
-//				}
 			
 				Log.i(getClass().getName(),"Response : "+response.getStatusLine().getStatusCode());
+				InputStream is=response.getEntity().getContent();
+				try
+				{
+					BufferedReader br=new BufferedReader(new InputStreamReader(is));
+					String s=br.readLine();
+					while(s!=null)
+					{
+						Log.d(getClass().getName(), s);
+						s=br.readLine();
+						// todo - if password is wrong - there may be a clue here...
+					}
+				}
+				finally
+				{
+					is.close();
+				}
 			}
 		}
 		catch(Exception e)
