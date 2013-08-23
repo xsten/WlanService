@@ -84,7 +84,14 @@ public class MainActivity extends Activity{
 		// avoids leakage : stops referencing everything that references me !
 		settingsIntent=null; 
 		serviceIntent=null;
-		unbindService(myServiceConnection);
+		if(myServiceConnection!=null)
+		{
+			try
+			{ 
+				unbindService(myServiceConnection);
+			}
+			catch(RuntimeException e){};  // Sometimes, the service is not bound upon destroy() call 
+		}
 		myServiceConnection=null;
 		
 	}
