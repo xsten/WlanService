@@ -11,6 +11,7 @@
 	<string name="OK">OK</string>
 	<string name="Cancel">Annuler</string>
 	<string name="registeredon">"Enregistré sur "</string>
+	<string name="loginfail">Problème d\'authentification</string>
 	<string name="supportedModules">Réseaux supportés:</string>
 	<string name="help">"L'application tourne en tâche de fond.\n
 Lorsque vous accrochez un réseau supporté, l'application s'enregistre automatiquement sur le réseau,

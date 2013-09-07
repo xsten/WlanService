@@ -5,11 +5,11 @@
 		<!-- guest est un réseau privé basé sur Cisco AP3500 ou 3600 (Cisco Unified Workspace) -->
 		<item>guest</item>
 		<!-- free-hotspot.com est dispo dans les quick, burgerking, ibis hotels/Mercure... -->
-		<!-- Disable free-hotspot.com and guest for official version -->
+		<!-- Disable free-hotspot.com for official version -->
 		
 		<!-- 
 		<item>free-hotspot.com</item>
-		-->
+		 -->
 		 
     </string-array>
 </resources>

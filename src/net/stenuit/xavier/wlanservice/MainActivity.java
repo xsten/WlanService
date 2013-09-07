@@ -1,5 +1,8 @@
 package net.stenuit.xavier.wlanservice;
 
+import java.util.Random;
+
+import net.stenuit.xavier.wlanservice.authentiker.BelgacomPostHttpTask;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,6 +12,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.State;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -178,6 +182,14 @@ public class MainActivity extends Activity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if("setLogin".equals(item.getTitleCondensed()))
 		{
+			// Test : random module...
+//			String[] modules=this.getResources().getStringArray(R.array.modules);
+//			Random r=new Random(System.currentTimeMillis());
+//			int idx=r.nextInt(modules.length);
+//			
+//			settingsIntent.putExtra("DEFAULT_AUTHENTIKER",modules[idx]);
+			// end test
+			
 			startActivity(settingsIntent);
 		}
 		

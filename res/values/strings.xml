@@ -12,7 +12,8 @@
 	<string name="setlogin">Set Login/Password</string>
 	<string name="OK">OK</string>
 	<string name="Cancel">Cancel</string>
-	<string name="registeredon">""Registered on "</string>
+	<string name="registeredon">"Registered on "</string>
+	<string name="loginfail">Authentification problem</string>
 	<string name="supportedModules">Supported networks:</string>
 	<string name="help">"This application runs in background.\n
 When the device connects to a supported network, the application registers automatically,

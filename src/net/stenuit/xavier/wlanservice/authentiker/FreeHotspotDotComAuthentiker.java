@@ -168,7 +168,8 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 			}
 			
 			Log.d(getClass().getName(),"Reached login page ! - just need to post OK");
-			String s="https://has.anacapa.biz/cgi-bin/bld_um_rel.pm";
+			// String s="https://has.anacapa.biz/cgi-bin/bld_um_rel.pm";
+			String s="http://mw.anacapa.biz/release";
 			
 			for (String k : htmlInputs.keySet()) {
 				s+="&";

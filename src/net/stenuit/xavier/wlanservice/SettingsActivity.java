@@ -29,6 +29,22 @@ public class SettingsActivity extends Activity {
 		
 		ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.modules, R.layout.spinnerlayout);
 		s.setAdapter(adapter);
+		
+		// find the module to show
+		Bundle extras=getIntent().getExtras();
+		try
+		{
+			String m=extras.getString("DEFAULT_AUTHENTIKER");
+			for (int i=0;i<adapter.getCount();i++)
+			{
+				if(m.compareTo(adapter.getItem(i).toString())==0)
+				{
+					s.setSelection(i);
+					break;
+				}
+			}
+		}
+		catch(Exception e){}; // No default specified
 	}
 
 
