@@ -70,7 +70,7 @@ public class GuestAuthentiker extends Authentiker {
 			HttpClient client = new DefaultHttpClient(cm, params);
 
 		// Seems not working anymore since 20130905
-		 /*
+		 
 			HttpPost post=new HttpPost("https://1.1.1.1/login.html");	
 			List<NameValuePair> pairs=new ArrayList<NameValuePair>();
 			pairs.add(new BasicNameValuePair("username", login));
@@ -81,13 +81,7 @@ public class GuestAuthentiker extends Authentiker {
 			pairs.add(new BasicNameValuePair("err_msg", ""));
 			pairs.add(new BasicNameValuePair("err_flag", "0"));
 			pairs.add(new BasicNameValuePair("buttonClicked", "4"));
-		*/
-			// New login method since 20130905
-			HttpPost post=new HttpPost("https://belgacom.portal.fon.com/en/login/processLogin");
-			List<NameValuePair> pairs=new ArrayList<NameValuePair>();
-			pairs.add(new BasicNameValuePair("login[user]",login));
-			pairs.add(new BasicNameValuePair("login[pass]", password));
-			pairs.add(new BasicNameValuePair("commit","Login"));
+		
 			// textView.append("Posting everyting");
 			post.setEntity(new UrlEncodedFormEntity(pairs));
 
