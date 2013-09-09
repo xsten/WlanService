@@ -15,6 +15,7 @@ import java.util.List;
 import net.stenuit.xavier.wlanservice.R;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -25,6 +26,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
@@ -151,9 +153,20 @@ public class BelgacomPostHttpTask extends Authentiker {
 					while(s!=null)
 					{
 						Log.d(getClass().getName(), s);
+						
+						if("There has been an error. Please try again later.".equals(s.trim()))
+						{
+							// if wrong, we shall respond with "unauthorized=401" http response
+							// simulates this behaviour by forging this answer
+							response.getEntity().consumeContent();
+							is.close();
+							response=new BasicHttpResponse(HttpVersion.HTTP_1_1,401,"Unauthorized");
+						}
+						
 						s=br.readLine();
 						// todo - if password is wrong - there may be a clue here...
 					}
+					
 				}
 				finally
 				{

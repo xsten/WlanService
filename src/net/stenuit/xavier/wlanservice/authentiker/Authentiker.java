@@ -61,12 +61,19 @@ public abstract class Authentiker extends AsyncTask<Object/*params*/, Object/*pr
 			// String txt=context.getResources().getConfiguration().locale.
 			if(resp.getStatusLine().getStatusCode()==200)
 			{
+				Log.d(getClass().getName(),"Sending positive answer");
 				Toast.makeText(context, context.getString(R.string.registeredon)+getPropertiesKey(), Toast.LENGTH_SHORT).show();
+			}
+			else if(resp.getStatusLine().getStatusCode()==401)
+			{
+				Log.d(getClass().getName(),"Sending unauthenticated answer");
+				Toast.makeText(context, getPropertiesKey()+" - "+context.getString(R.string.loginfail), Toast.LENGTH_SHORT).show();
 			}
 		}
 		else
 		{
 			// Toast.makeText(context, "Error connecting to login server", Toast.LENGTH_SHORT).show();
+			Log.d(getClass().getName(),"null answer");
 		}
 		
 	}

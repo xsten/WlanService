@@ -11,6 +11,7 @@
 	<string name="OK">OK</string>
 	<string name="Cancel">Annuleren</string>
 	<string name="registeredon">"Geregistreerd op "</string>
+	<string name="loginfail">Authentificatie probleem</string>
 	<string name="supportedModules">Ondersteunde netwerken:</string>
 	<string name="help">"Deze applicatie draait op de achtergrond.\n
 Zodra u een ondersteund netwerk aansluit, stuurt de applicatie automatisch gebruikersnaam/wachtwoord

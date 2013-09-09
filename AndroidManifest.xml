@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="206"
-    android:versionName="2.06" >
+    android:versionCode="207"
+    android:versionName="2.07b" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
 	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
@@ -14,6 +14,7 @@
 	<!-- 2.04 Changes for release on playstore -->
 	<!-- 2.05 Fon : connects on www.w3.org, added dutch translations -->
 	<!-- 2.06 Working version -->
+	<!-- 2.07b On 2.07, guest was not working anymore... branch back -->
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="17" />
