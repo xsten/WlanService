@@ -7,9 +7,9 @@
 		<!-- free-hotspot.com est dispo dans les quick, burgerking, ibis hotels/Mercure... -->
 		<!-- Disable free-hotspot.com for official version -->
 		
-		<!-- 
+		 
 		<item>free-hotspot.com</item>
-		 -->
+		
 		 
     </string-array>
 </resources>

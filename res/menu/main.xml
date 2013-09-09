@@ -1,4 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/item1" android:title="@string/setlogin" android:titleCondensed="setLogin"></item>
+    <item android:id="@+id/item1" android:title="@string/helpstring" android:titleCondensed="help"></item>
 
 </menu>

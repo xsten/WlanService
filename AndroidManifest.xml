@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="207"
-    android:versionName="2.07" >
+    android:versionCode="208"
+    android:versionName="2.08" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
 	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
@@ -14,7 +14,8 @@
 	<!-- 2.04 Changes for release on playstore -->
 	<!-- 2.05 Fon : connects on www.w3.org, added dutch translations -->
 	<!-- 2.06 Fixed exception detected in field-->
-	<!-- 2.07 Inform user about authentication problems-->
+	<!-- 2.07 Inform user about authentication problems, fixed new connection paradigm for Belgacom Fon -->
+	<!-- 2.08 work -->
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="17" />
@@ -40,6 +41,9 @@
             </intent-filter>
         </activity>
     	<activity android:name="net.stenuit.xavier.wlanservice.SettingsActivity"
+    	    android:screenOrientation="portrait">
+    	</activity>
+    	<activity android:name="net.stenuit.xavier.wlanservice.HelpActivity"
     	    android:screenOrientation="portrait">
     	</activity>
     </application>

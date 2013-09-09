@@ -1,27 +1,17 @@
 package net.stenuit.xavier.wlanservice;
 
-import java.util.Random;
-
-import net.stenuit.xavier.wlanservice.authentiker.BelgacomPostHttpTask;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.NetworkInfo.State;
-import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
 public class MainActivity extends Activity{
@@ -70,16 +60,27 @@ public class MainActivity extends Activity{
 		
 		
 		// Turns on the "autoregister" button, since the broadcast receiver is active
-		ToggleButton tb=(ToggleButton)findViewById(R.id.toggleButton1);
-		tb.setChecked(true);
+		// ToggleButton tb=(ToggleButton)findViewById(R.id.toggleButton1);
+		// tb.setChecked(true);
 		
 		
 		// Creates another intent for settings screen
 		settingsIntent=new Intent(this,SettingsActivity.class);
-				
-		Log.i(getClass().getName(),"Finished onCreate");
+
+		LinearLayout ll=(LinearLayout)findViewById(R.id.myLinearLayout);
+		String[] modules=this.getResources().getStringArray(R.array.modules);
+		for (int i=0;i<modules.length;i++)
+		{
+			LinearLayout twoButtons=(LinearLayout)getLayoutInflater().inflate(R.layout.twobuttons,null);
+			ToggleButton tb=(ToggleButton)twoButtons.getChildAt(0);
+			tb.setTextOn(modules[i]+" active");
+			tb.setTextOff(modules[i]+" inactive");
+			tb.setChecked(true);
+			ll.addView(twoButtons);
+		}
 		
-		// finish(); // will hide GUI
+		Log.i(getClass().getName(),"Finished onCreate");
+
 	}
 	
 	@Override
@@ -148,27 +149,29 @@ public class MainActivity extends Activity{
 		Log.i(getClass().getName(),"onResume() called");
 	}
 
-	public void statusClicked(View v)
-	{
-		checkWlanStatus();
-	}
-	public void registerClicked(View v)
-	{
-		registerWlan();
-		
-	}
+
 	public void autoClicked(View v)
 	{
 		ToggleButton tb=(ToggleButton)v;
+		try
+		{
+			LinearLayout lila=(LinearLayout)v.getParent();
+			
+			Log.d(getClass().getName(),"Clicked : "+((ToggleButton)lila.getChildAt(0)).getText());
+		}
+		catch(ClassCastException e)
+		{
+			Log.e(getClass().getName(),"Exception thrown : ",e);
+		}
 		if(tb.isChecked())
 		{
 			Log.d(getClass().getName(),"Button checked");
-			bindMyService();
+			// bindMyService();
 		}
 		else
 		{
 			Log.d(getClass().getName(),"Button cleared");
-			unbindMyService();
+			// unbindMyService();
 		}
 	}
 	@Override
@@ -180,87 +183,38 @@ public class MainActivity extends Activity{
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if("setLogin".equals(item.getTitleCondensed()))
+		if("help".equals(item.getTitleCondensed()))
 		{
-			// Test : random module...
-//			String[] modules=this.getResources().getStringArray(R.array.modules);
-//			Random r=new Random(System.currentTimeMillis());
-//			int idx=r.nextInt(modules.length);
-//			
-//			settingsIntent.putExtra("DEFAULT_AUTHENTIKER",modules[idx]);
-			// end test
-			
-			startActivity(settingsIntent);
-		}
-		
-		return false; // TODO : what if we return true ???
-	}
 
-	private void registerWlan() {
-		showText("TODO");
-		/*
-		String ssid=Utils.getSSID(this);
-		if(ssid==null) ssid="ssid was not returned";
-		if(!ssid.equals(getResources().getString(R.string.SupportedSSID)))
-		{
-			showText("Please connect to network '"+getResources().getString(R.string.SupportedSSID)+"' first !");
-			return;
+			Intent helpIntent=new Intent(this,HelpActivity.class);
+			startActivity(helpIntent);
 		}
 		
-		PostHttpTask tsk=new PostHttpTask();
-		tsk.execute(getApplicationContext(),null,myBroadcastReceiver.getLogin(),myBroadcastReceiver.getPassword());
-		*/
-	}
-
-	private void checkWlanStatus() {
-		String toshow;
-		
-		try
-		{
-			String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-			toshow="WLAN login service - v"+versionName+"\n";
-		}
-		catch (NameNotFoundException e) {
-			toshow="Could not read version\n";
-		}
-		
-		ConnectivityManager cman=(ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-		State wifiState=cman.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
-		String state="UNKNOWN";
-		if(wifiState==NetworkInfo.State.CONNECTED) state="CONNECTED";
-		if(wifiState==NetworkInfo.State.DISCONNECTED) state="DISCONNECTED";
-		
-		toshow+="Wifi State : "+state+"\n";
-		
-		if("CONNECTED".equals(state))
-		{
-			WifiManager wifiManager=(WifiManager)getSystemService(Context.WIFI_SERVICE);
-			WifiInfo wifiInfo=wifiManager.getConnectionInfo();
-			String ssid=wifiInfo.getSSID();
-			toshow+=("SSID:"+ssid+"\n");
-		}
-		/*
-		if(getPassword()==null)
-			toshow+="Password is not set - please set your login/password using menu\n";
-		else
-			toshow+="Password is set for user "+getLogin();
-		*/
-		
-		// TODO : prints supported SSD (read from R.array.modules)
-		toshow+=getResources().getString(R.string.supportedModules)+"\n";
-		String[] modules=this.getResources().getStringArray(R.array.modules);
-		for(String module : modules)
-		{
-			toshow+=module+"\n";
-		}
-		showText(toshow);
-	}
-
-	private void showText(String txt)
-	{
-		TextView v=(TextView)findViewById(R.id.textView1);
-		v.setText(txt);
+		return false;
 	}
 	
+	public void settingsClicked(View v)
+	{
+		try
+		{
+			LinearLayout lila=(LinearLayout)v.getParent();
+			
+			Log.d(getClass().getName(),"Clicked : "+((ToggleButton)lila.getChildAt(0)).getText());
+		}
+		catch(ClassCastException e)
+		{
+			Log.e(getClass().getName(),"Exception thrown : ",e);
+		}
+
+		// Test : random module...
+//		String[] modules=this.getResources().getStringArray(R.array.modules);
+//		Random r=new Random(System.currentTimeMillis());
+//		int idx=r.nextInt(modules.length);
+//		
+//		settingsIntent.putExtra("DEFAULT_AUTHENTIKER",modules[idx]);
+		// end test
+		
+		startActivity(settingsIntent);
+	}	
 	
 }

@@ -9,16 +9,15 @@
 	<string name="Status">Status</string>
 	<string name="AutoRegisterOn">AutoRegister ON</string>
 	<string name="AutoRegisterOff">AutoRegister OFF</string>
-	<string name="setlogin">Set Login/Password</string>
 	<string name="OK">OK</string>
 	<string name="Cancel">Cancel</string>
 	<string name="registeredon">"Registered on "</string>
 	<string name="loginfail">Authentification problem</string>
 	<string name="supportedModules">Supported networks:</string>
+	<string name="helpstring">help</string>
 	<string name="help">"This application runs in background.\n
 When the device connects to a supported network, the application registers automatically,
 sending credentials and approving user agreements for you.\n
-Please use menu/Set Login/Password to set passwords.\n
-Click "Status" to list the supported networks.\n
-You can disable the service with the &quot;Autoregister&quot; toggle button"</string>
+Set password for a given network by clicking the gear icon besides its name.\n
+You can disable/enable each network by clicking on it"</string>
 </resources>
