@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="208"
-    android:versionName="2.08" >
+    android:versionCode="209"
+    android:versionName="2.09" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
 	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
@@ -16,6 +16,7 @@
 	<!-- 2.06 Fixed exception detected in field-->
 	<!-- 2.07 Inform user about authentication problems, fixed new connection paradigm for Belgacom Fon -->
 	<!-- 2.08 work -->
+	<!-- 2.09 should work with free-hotspot.com -->
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="17" />
