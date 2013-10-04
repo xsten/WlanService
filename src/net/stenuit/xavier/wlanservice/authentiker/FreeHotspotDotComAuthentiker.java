@@ -8,7 +8,6 @@ import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Locale;
 
-import net.stenuit.xavier.wlanservice.R;
 import net.stenuit.xavier.wlanservice.Utils;
 
 import org.apache.http.HttpEntity;
@@ -27,8 +26,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
 
 @SuppressLint("DefaultLocale")
@@ -50,7 +47,6 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 
 		HttpResponse response=null;
 		
-		Resources res=((Context)arg0[0]).getResources();
 		KeyStore localKeyStore;
 		//String login=super.getCredentials().get("login");
 		//String password=super.getCredentials().get("password");
@@ -58,7 +54,7 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 		try
 		{
 			localKeyStore=KeyStore.getInstance("BKS");
-			InputStream in=res.openRawResource(R.raw.mykeystore);
+			InputStream in=getClass().getResource("mykeystore.bks").openStream(); //  (R.raw.mykeystore);
 			localKeyStore.load(in,"password".toCharArray());
 			
 			SchemeRegistry schemeRegistry = new SchemeRegistry();
@@ -168,7 +164,6 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 			}
 			
 			Log.d(getClass().getName(),"Reached login page ! - just need to post OK");
-			// String s="https://has.anacapa.biz/cgi-bin/bld_um_rel.pm";
 			String s="http://mw.anacapa.biz/release";
 			
 			for (String k : htmlInputs.keySet()) {
@@ -187,21 +182,110 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 			s=br.readLine();
 			while(s!=null)
 			{
+				// After the post, there is still a redirection... followit !!
 				Log.d(getClass().getName(),s);
 				s=br.readLine();
 			}
+			
+			// After the post, there is still a redirection... followit !!
+			// follow the redirection 302
+			if(response.getStatusLine().getStatusCode()==302)
+			{
+				Log.d(getClass().getName(),"Redirected !!!");
+				String work=response.getHeaders("Location")[0].getValue();
+				if(!work.contains("parms="))
+				{
+					redirectURL=work;
+				}
+				else
+				{
+					String part1=work.substring(0,work.indexOf("parms="));
+					// part2 is "parms="
+					String part3=URLEncoder.encode(work.substring(work.indexOf("parms=")+6));
+					redirectURL=part1+"parms="+part3;
+					Log.d(getClass().getName(),"redirection with reencoded params : "+redirectURL);
+				}
+			}
+			else
+			{
+				redirectURL=null;
+			}
+			
+			if(entity!=null)entity.consumeContent();
 			br.close();
 			is.close();
-			client.getConnectionManager().shutdown();
 			
+			while(redirectURL!=null)
+			{
+				Log.d(getClass().getName(), "Following redirection "+redirectURL);
+				HttpGet httpget=new HttpGet(redirectURL);
+				response=client.execute(httpget);
+				Log.d(getClass().getName(),"Response : "+response.getStatusLine().getStatusCode());
+				
+				if(response.getStatusLine().getStatusCode()==302)
+				{
+					Log.d(getClass().getName(),"Redirected !!!");
+					redirected=true;
+					String work=response.getHeaders("Location")[0].getValue();
+					if(!work.contains("parms="))
+					{
+						redirectURL=work;
+					}
+					else
+					{
+						String part1=work.substring(0,work.indexOf("parms="));
+						// part2 is "parms="
+						String part3=URLEncoder.encode(work.substring(work.indexOf("parms=")+6));
+						redirectURL=part1+"parms="+part3;
+						Log.d(getClass().getName(),"redirection with reencoded params : "+redirectURL);
+					}
+					continue;
+				}
+				
+				entity=response.getEntity();
+				
+				Log.d(getClass().getName(),"Login form get :"+response.getStatusLine() );
+								
+				is=entity.getContent();
+				br=new BufferedReader(new InputStreamReader(is));
+			
+				s=br.readLine();
+				redirectURL=null;
+				while(s!=null)
+				{
+					Log.d(getClass().getName(),s);
+					if(s.toUpperCase(Locale.ENGLISH).contains("<META HTTP-EQUIV=\"REFRESH\""))
+					{
+						redirected=true;
+						redirectURL=s.substring(s.indexOf("URL=")+4,s.length()-2);		
+						redirectURL=redirectURL.replaceAll("&amp;", "&");
+						break;
+					}
+					if(s.contains("<input type=\"hidden\" name="))
+					{
+						if(!s.contains("sclot")&&!s.contains("scValue"))
+						{
+							String[] parsed=Utils.parseInputLine(s);
+							htmlInputs.put(parsed[0],parsed[1]);
+						}
+					}
+					
+					s=br.readLine();
+				}
+				br.close();
+				if(entity!=null)entity.consumeContent();
+			}
+			
+			is.close();
+			client.getConnectionManager().shutdown();
 		}
 		catch(Exception e)
 		{
-			Log.e(getClass().getName(),"Exception thrown",e);
+			e.printStackTrace();
 			// Toast.makeText(ctx, "Problem connecting to "+getPropertiesKey(), Toast.LENGTH_SHORT).show();
 		}
+
 		
-		// TODO provide an httpresponse
 		return response;
 	}
 
