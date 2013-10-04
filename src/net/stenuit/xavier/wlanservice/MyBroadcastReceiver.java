@@ -9,12 +9,14 @@ import net.stenuit.xavier.wlanservice.authentiker.AuthentikerFactory;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask.Status;
 import android.util.Log;
 
 public class MyBroadcastReceiver extends BroadcastReceiver {
 	private Map<String,String> login=new HashMap<String, String>();
 	private Map<String,String> password=new HashMap<String,String>();
 	public static File SettingsFile=null;
+	private HashMap<String, Boolean> authentikerActive=new HashMap<String,Boolean>();
 	
 	public String getLogin(String key) {
 		if(key.contains(".")) // removes the trailing .com
@@ -50,6 +52,15 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 		String ssid=Utils.getSSID(ctx);
 		if(ssid==null) return; // not connected
 		
+		if(authentikerActive.containsKey(ssid))
+		{
+			if(authentikerActive.get(ssid)==false)
+			{
+				Log.d(getClass().getName(),"Authentiker "+ssid+" is not active - ignoring");
+				return;
+			}
+		}
+		
 		Authentiker authentiker=AuthentikerFactory.getInstance().getAuthentiker(ssid);
 		if(authentiker==null)
 		{
@@ -66,7 +77,23 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 			credentials.put("login",logins.get(authentiker.getPropertiesKey()));
 			credentials.put("password",passwords.get(authentiker.getPropertiesKey()));
 			authentiker.setCredentials(credentials);
-			authentiker.execute(ctx);
+			try
+			{
+				if(!(authentiker.getStatus()==Status.RUNNING))
+				{
+					Log.d(getClass().getName(),"Starting authentiker");
+					authentiker.execute(ctx);
+				}
+				else
+				{
+					Log.d(getClass().getName(),"Don't start authentiker - already running");
+				}
+					
+			}
+			catch(RuntimeException rte)
+			{
+				Log.e(getClass().getName(),"authentiker already running ?",rte);
+			}
 			
 		}
 	}
@@ -86,6 +113,15 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 			setLogin(null);
 			setPassword(null);
 		}
+	}
+
+	/**
+	 * Activates or desactivates authentikers
+	 * @param chosenAuthentiker
+	 * @param checked
+	 */
+	public void setAuthentikerStatus(String chosenAuthentiker, boolean checked) {
+		authentikerActive.put(chosenAuthentiker, checked);
 	}
 }
 

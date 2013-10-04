@@ -54,6 +54,9 @@ public class GuestAuthentiker extends Authentiker {
 		
 		try
 		{
+			Log.d(getClass().getName(),"Check whether internet connexion OK");
+			
+			
 			Log.d(getClass().getName(),"Sending credentials to server : "+login+" "+password);
 			
 			localKeyStore=KeyStore.getInstance("BKS");
@@ -68,8 +71,6 @@ public class GuestAuthentiker extends Authentiker {
 			ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
 
 			HttpClient client = new DefaultHttpClient(cm, params);
-
-		// Seems not working anymore since 20130905
 		 
 			HttpPost post=new HttpPost("https://1.1.1.1/login.html");	
 			List<NameValuePair> pairs=new ArrayList<NameValuePair>();
@@ -80,7 +81,7 @@ public class GuestAuthentiker extends Authentiker {
 			pairs.add(new BasicNameValuePair("info_flag", "0"));
 			pairs.add(new BasicNameValuePair("err_msg", ""));
 			pairs.add(new BasicNameValuePair("err_flag", "0"));
-			pairs.add(new BasicNameValuePair("buttonClicked", "4"));
+			pairs.add(new BasicNameValuePair("buttonClicked", "0"));
 		
 			// textView.append("Posting everyting");
 			post.setEntity(new UrlEncodedFormEntity(pairs));
@@ -93,14 +94,14 @@ public class GuestAuthentiker extends Authentiker {
 			String s=br.readLine();
 			while(s!=null)
 			{
-				// Log.d(getClass().getName(),s);
+				Log.d(getClass().getName(),s);
 				if(s.contains("<INPUT TYPE=\"hidden\" NAME=\"err_flag"))
 				{
 					int idx=s.indexOf("VALUE=");
 					String value=s.substring(idx+7, idx+8);
 					Log.d(getClass().getName(),"s="+s);
 					Log.d(getClass().getName(),"value="+value);
-					if("0"!=value)
+					if("0".compareTo(value)!=0)
 					{
 						response.getEntity().consumeContent();
 						response=new BasicHttpResponse(HttpVersion.HTTP_1_1,401,"Unauthorized");

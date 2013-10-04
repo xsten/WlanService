@@ -56,13 +56,7 @@ public class MainActivity extends Activity{
 		
 		serviceIntent=new Intent(this,WlanService.class);
 
-		bindMyService();
-		
-		
-		// Turns on the "autoregister" button, since the broadcast receiver is active
-		// ToggleButton tb=(ToggleButton)findViewById(R.id.toggleButton1);
-		// tb.setChecked(true);
-		
+		bindMyService();		
 		
 		// Creates another intent for settings screen
 		settingsIntent=new Intent(this,SettingsActivity.class);
@@ -73,8 +67,9 @@ public class MainActivity extends Activity{
 		{
 			LinearLayout twoButtons=(LinearLayout)getLayoutInflater().inflate(R.layout.twobuttons,null);
 			ToggleButton tb=(ToggleButton)twoButtons.getChildAt(0);
-			tb.setTextOn(modules[i]+" active");
-			tb.setTextOff(modules[i]+" inactive");
+			tb.setTextOn(modules[i]);
+			tb.setTextOff(modules[i]);
+			
 			tb.setChecked(true);
 			ll.addView(twoButtons);
 		}
@@ -86,6 +81,7 @@ public class MainActivity extends Activity{
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		
 		// avoids leakage : stops referencing everything that references me !
 		settingsIntent=null; 
 		serviceIntent=null;
@@ -101,17 +97,12 @@ public class MainActivity extends Activity{
 		
 	}
 	private void bindMyService() {
+		Log.d(getClass().getName(),"bindMyService() called");
 		// Starts the service if it was not yet started
 		// Without this call, leakage exceptions will be shown
 		startService(new Intent(this,WlanService.class));
 		if(serviceIntent!=null && myServiceConnection!=null)
 			bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
-	}
-	
-	private void unbindMyService()
-	{
-		if(myServiceConnection!=null)
-			unbindService(myServiceConnection);
 	}
 	
 	private ServiceConnection myServiceConnection=new ServiceConnection() {
@@ -155,23 +146,13 @@ public class MainActivity extends Activity{
 		ToggleButton tb=(ToggleButton)v;
 		try
 		{
-			LinearLayout lila=(LinearLayout)v.getParent();
-			
-			Log.d(getClass().getName(),"Clicked : "+((ToggleButton)lila.getChildAt(0)).getText());
+			String chosenAuthentiker=tb.getText().toString();
+			Log.d(getClass().getName(),"Clicked : "+chosenAuthentiker);
+			myBroadcastReceiver.setAuthentikerStatus(chosenAuthentiker,tb.isChecked());
 		}
 		catch(ClassCastException e)
 		{
 			Log.e(getClass().getName(),"Exception thrown : ",e);
-		}
-		if(tb.isChecked())
-		{
-			Log.d(getClass().getName(),"Button checked");
-			// bindMyService();
-		}
-		else
-		{
-			Log.d(getClass().getName(),"Button cleared");
-			// unbindMyService();
 		}
 	}
 	@Override
@@ -198,8 +179,10 @@ public class MainActivity extends Activity{
 		try
 		{
 			LinearLayout lila=(LinearLayout)v.getParent();
-			
-			Log.d(getClass().getName(),"Clicked : "+((ToggleButton)lila.getChildAt(0)).getText());
+			ToggleButton tb=(ToggleButton)lila.getChildAt(0);
+			String chosenAuthentiker=tb.getText().toString();
+			Log.d(getClass().getName(),"Clicked : "+chosenAuthentiker);
+			settingsIntent.putExtra("DEFAULT_AUTHENTIKER",chosenAuthentiker);
 		}
 		catch(ClassCastException e)
 		{

@@ -14,6 +14,7 @@ import android.widget.Toast;
 public abstract class Authentiker extends AsyncTask<Object/*params*/, Object/*progress*/, Object/*result*/> {
 	private Map<String, String> credentials;
 	protected Context context;
+	private boolean active=true;
 	
 	/**
 	 * In the properties file, Login will be prepended with an unique key.
@@ -25,7 +26,7 @@ public abstract class Authentiker extends AsyncTask<Object/*params*/, Object/*pr
 	 * @return the key (fon in the example above)
 	 */
 	public abstract String getPropertiesKey(); 
-	
+
 	public Map<String,String>getCredentials()
 	{
 		return credentials;
@@ -58,6 +59,8 @@ public abstract class Authentiker extends AsyncTask<Object/*params*/, Object/*pr
 		{
 			HttpResponse resp=(HttpResponse)result;
 			Log.d(getClass().getName(),"Status code : "+resp.getStatusLine().getStatusCode()+"\n");
+			Log.d(getClass().getName(),"Object ID : "+this.toString());
+			
 			// String txt=context.getResources().getConfiguration().locale.
 			if(resp.getStatusLine().getStatusCode()==200)
 			{
