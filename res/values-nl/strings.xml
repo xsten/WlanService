@@ -7,7 +7,7 @@
 	<string name="Status">Status</string>
 	<string name="AutoRegisterOn">Zelfregistratie ON</string>
 	<string name="AutoRegisterOff">Zelfregistratie OFF</string>
-	<string name="setlogin">Gebruiker/Wachtwoord</string>
+	<string name="helpstring">Hulp</string>
 	<string name="OK">OK</string>
 	<string name="Cancel">Annuleren</string>
 	<string name="registeredon">"Geregistreerd op "</string>
