@@ -7,12 +7,13 @@
 	<string name="Status">Statut</string>
 	<string name="AutoRegisterOn">Autoenregistrement ACTIF</string>
 	<string name="AutoRegisterOff">Autoenregistrement INACTIF</string>
-	<string name="setlogin">Login/Mot de passe</string>
+	<!-- <string name="setlogin">Login/Mot de passe</string>  -->
 	<string name="OK">OK</string>
 	<string name="Cancel">Annuler</string>
 	<string name="registeredon">"Enregistré sur "</string>
 	<string name="loginfail">Problème d\'authentification</string>
 	<string name="supportedModules">Réseaux supportés:</string>
+	<string name="helpstring">Aide</string>
 	<string name="help">"L'application tourne en tâche de fond.\n
 Lorsque vous accrochez un réseau supporté, l'application s'enregistre automatiquement sur le réseau,
 soit en envoyant votre mot de passe, soit en approuvant les conditions d'utilisation pour vous.\n
