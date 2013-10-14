@@ -8,6 +8,7 @@ import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Locale;
 
+import net.stenuit.xavier.wlanservice.R;
 import net.stenuit.xavier.wlanservice.Utils;
 
 import org.apache.http.HttpEntity;
@@ -26,6 +27,8 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 
 @SuppressLint("DefaultLocale")
@@ -46,6 +49,7 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 		super.doInBackground(arg0);
 
 		HttpResponse response=null;
+		Resources res=((Context)arg0[0]).getResources();
 		
 		KeyStore localKeyStore;
 		//String login=super.getCredentials().get("login");
@@ -54,7 +58,9 @@ public class FreeHotspotDotComAuthentiker extends Authentiker {
 		try
 		{
 			localKeyStore=KeyStore.getInstance("BKS");
-			InputStream in=getClass().getResource("mykeystore.bks").openStream(); //  (R.raw.mykeystore);
+			// InputStream in=getClass().getResource("mykeystore.bks").openStream(); //  (R.raw.mykeystore);
+			InputStream in=res.openRawResource(R.raw.mykeystore);
+
 			localKeyStore.load(in,"password".toCharArray());
 			
 			SchemeRegistry schemeRegistry = new SchemeRegistry();

@@ -16,8 +16,8 @@ import android.widget.ToggleButton;
 
 public class MainActivity extends Activity{
 	Intent settingsIntent=null;
-	private MyBroadcastReceiver myBroadcastReceiver=null;
 	private Intent serviceIntent;
+	private MyBinder myBinder;
 	
 	/*
 	public String getLogin() {
@@ -31,8 +31,8 @@ public class MainActivity extends Activity{
 		if(hasFocus)
 		{	// We got again the focus, maybe the SettingsActivity has changed the password !
 			// Let's reread it
-			myBroadcastReceiver.readLoginFromFile();
-			
+			if(myBinder!=null)
+				myBinder.getService().getMyBroadcastReceiver().readLoginFromFile();
 		}
 	}
 
@@ -69,9 +69,10 @@ public class MainActivity extends Activity{
 			ToggleButton tb=(ToggleButton)twoButtons.getChildAt(0);
 			tb.setTextOn(modules[i]);
 			tb.setTextOff(modules[i]);
-			
 			tb.setChecked(true);
 			ll.addView(twoButtons);
+			
+			
 		}
 		
 		Log.i(getClass().getName(),"Finished onCreate");
@@ -103,6 +104,8 @@ public class MainActivity extends Activity{
 		startService(new Intent(this,WlanService.class));
 		if(serviceIntent!=null && myServiceConnection!=null)
 			bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
+		
+		
 	}
 	
 	private ServiceConnection myServiceConnection=new ServiceConnection() {
@@ -110,6 +113,7 @@ public class MainActivity extends Activity{
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			Log.i(getClass().getName(),"onServiceDisconnected called");
+			myBinder=null;
 		}
 		
 		@Override
@@ -117,14 +121,8 @@ public class MainActivity extends Activity{
 			Log.i(getClass().getName(),"onServiceConnected() called");
 			// if the service is connected, it means that it is running
 			// --> we can now read wht value of myBroadcastListener !!!
-			myBroadcastReceiver=WlanService.myBroadcastReceiver;
-			if(myBroadcastReceiver==null)
-				Log.e(getClass().getName(),"myBroadcastListener is null !");
-		
 			
-			// classCastException
-			//wlanService=((WlanService.LocalBinder)service).getService();
-			//Log.i(getClass().getName(),"wlanService="+wlanService.toString());
+			myBinder=(MyBinder)service;
 		}
 	};
 	@Override
@@ -138,6 +136,15 @@ public class MainActivity extends Activity{
 	protected void onResume() {
 		super.onResume();
 		Log.i(getClass().getName(),"onResume() called");
+		
+//		if(myBinder!=null)
+//		{
+//			String[] modules=this.getResources().getStringArray(R.array.modules);
+//			for (int i=0;i<modules.length;i++)
+//			{
+//				myBinder.getService().getMyBroadcastReceiver().setAuthentikerStatus(modules[i], true);
+//			}
+//		}
 	}
 
 
@@ -148,7 +155,10 @@ public class MainActivity extends Activity{
 		{
 			String chosenAuthentiker=tb.getText().toString();
 			Log.d(getClass().getName(),"Clicked : "+chosenAuthentiker);
-			myBroadcastReceiver.setAuthentikerStatus(chosenAuthentiker,tb.isChecked());
+			if(myBinder!=null)
+				myBinder.getService().getMyBroadcastReceiver().setAuthentikerStatus(chosenAuthentiker,tb.isChecked());
+		
+			
 		}
 		catch(ClassCastException e)
 		{

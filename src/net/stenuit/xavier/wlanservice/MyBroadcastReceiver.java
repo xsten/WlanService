@@ -48,6 +48,14 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context ctx, Intent intent) {		
 		Log.d(getClass().getName(),"onReceive called");
+		
+		Log.d(getClass().getName(),"list of authentikers : ");
+		// Lists the active authentikers
+		for(String s:authentikerActive.keySet())
+		{
+			Log.d(getClass().getName(),"Authentiker "+s+" status:"+authentikerActive.get(s));
+		}
+		
 		// Checks connected WIFI
 		String ssid=Utils.getSSID(ctx);
 		if(ssid==null) return; // not connected
@@ -122,6 +130,11 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	 */
 	public void setAuthentikerStatus(String chosenAuthentiker, boolean checked) {
 		authentikerActive.put(chosenAuthentiker, checked);
+		
+		for(String s:authentikerActive.keySet())
+		{
+			Log.d(getClass().getName(),"authentiker "+s+":"+authentikerActive.get(s));
+		}
 	}
 }
 

@@ -52,10 +52,13 @@ public class GuestAuthentiker extends Authentiker {
 		String login=super.getCredentials().get("login");
 		String password=super.getCredentials().get("password");
 		
+		
+		
 		try
 		{
-			Log.d(getClass().getName(),"Check whether internet connexion OK");
-			
+			// Log.d(getClass().getName(),"Check whether we are redirected");
+			// sleeping 2 seconds
+			Thread.sleep(2000);
 			
 			Log.d(getClass().getName(),"Sending credentials to server : "+login+" "+password);
 			
@@ -81,7 +84,7 @@ public class GuestAuthentiker extends Authentiker {
 			pairs.add(new BasicNameValuePair("info_flag", "0"));
 			pairs.add(new BasicNameValuePair("err_msg", ""));
 			pairs.add(new BasicNameValuePair("err_flag", "0"));
-			pairs.add(new BasicNameValuePair("buttonClicked", "0"));
+			pairs.add(new BasicNameValuePair("buttonClicked", "4"));
 		
 			// textView.append("Posting everyting");
 			post.setEntity(new UrlEncodedFormEntity(pairs));
