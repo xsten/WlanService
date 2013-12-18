@@ -20,4 +20,5 @@ When the device connects to a supported network, the application registers autom
 sending credentials and approving user agreements for you.\n
 Set password for a given network by clicking the gear icon besides its name.\n
 You can disable/enable each network by clicking on it"</string>
+	<string name="manualConnect">Manual Connection</string>
 </resources>

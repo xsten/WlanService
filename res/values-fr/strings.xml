@@ -20,4 +20,5 @@ soit en envoyant votre mot de passe, soit en approuvant les conditions d'utilisa
 Utilisez le menu Login/Mot de passe pour enregistrer votre mot de passe.\n
 Utilisez \"Statut\" to voir tous les réseaux supportés.\n
 Vous pouvez activer/désactiver le service en sélectionnant/désélectionnant le bouton \"Autoenregistrement\""</string>
+	<string name="manualConnect">Connexion Manuelle</string>
 </resources>

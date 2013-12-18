@@ -11,10 +11,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
-public class MainActivity extends Activity{
+public class MainActivity extends Activity implements View.OnClickListener {
 	Intent settingsIntent=null;
 	private Intent serviceIntent;
 	private MyBinder myBinder;
@@ -74,6 +75,11 @@ public class MainActivity extends Activity{
 			
 			
 		}
+		
+		Button b=new Button(this);
+		b.setText(getResources().getString(R.string.manualConnect));
+		b.setOnClickListener(this);
+		ll.addView(b);
 		
 		Log.i(getClass().getName(),"Finished onCreate");
 
@@ -208,6 +214,19 @@ public class MainActivity extends Activity{
 		// end test
 		
 		startActivity(settingsIntent);
+	}
+
+	@Override
+	public void onClick(View v) {
+		// Called when "manual connection" is clicked
+		Log.d(getClass().getName(),"onClick() called");
+
+		if(serviceIntent!=null)
+		{
+			myBinder.getService().getMyBroadcastReceiver().onReceive(v.getContext(), null);
+			
+		}
+		
 	}	
 	
 }

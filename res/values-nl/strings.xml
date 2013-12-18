@@ -22,4 +22,5 @@ U kunt de service in/uitschakelen door het selecteren/deselecteren van de
 \"zelfregistratie\" knop\n
 (Contacteer me om een vertaalfout te melden)
 "</string>
+	<string name="manualConnect">Manueel Aansluiting</string>
 </resources>
