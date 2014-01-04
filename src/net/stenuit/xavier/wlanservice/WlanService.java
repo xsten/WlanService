@@ -81,8 +81,23 @@ public class WlanService extends Service{
 		
 		Log.d(getClass().getName(),"Registring BroadcastReceiver");
 		try
-		{	
-			this.registerReceiver(myBroadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+		{
+			IntentFilter intf=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+			/*
+			 * D'après des sources internet, il existe également un autre événement plus rapide !
+			 * https://android.googlesource.com/platform/frameworks/base.git/+/android-4.3_r2.1/core/java/android/net/ConnectivityManager.java
+			 *      
+			 * Identical to {@link #CONNECTIVITY_ACTION} broadcast, but sent without any
+    		@SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    		public static final String CONNECTIVITY_ACTION_IMMEDIATE =
+            "android.net.conn.CONNECTIVITY_CHANGE_IMMEDIATE";
+			 */
+			if(android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.JELLY_BEAN_MR1)
+			{
+				Log.i(getClass().getName(),"Detected android > 4.2, adding new CONNECTIVITY_CHANGE_IMMEDIATE");
+				intf.addAction("android.net.conn.CONNECTIVITY_CHANGE_IMMEDIATE");
+			}
+			this.registerReceiver(myBroadcastReceiver, intf);
 		}
 		catch(Exception e){
 			Log.e(getClass().getName(), "Caught Exception", e);
