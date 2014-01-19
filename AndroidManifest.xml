@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="2120"
-    android:versionName="2.12" >
+    android:versionCode="2130"
+    android:versionName="2.13" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
 	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
@@ -20,6 +20,7 @@
 	<!-- 2.10 works again with guest -->
 	<!-- 2.11 added "manual connect" button -->
 	<!-- 2.12 attempt to skip CONNECTIVITY_CHANGE_DELAY on 4.3 devices (faster login) -->
+	<!-- 2.13 support quotes that suddently appeared in SSID since 4.3 upgrade ! -->
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="17" />
