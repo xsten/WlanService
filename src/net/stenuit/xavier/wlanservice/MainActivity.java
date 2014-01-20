@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 
@@ -76,11 +75,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			
 		}
 		
+		/*
 		Button b=new Button(this);
 		b.setText(getResources().getString(R.string.manualConnect));
 		b.setOnClickListener(this);
 		ll.addView(b);
-		
+		*/
 		Log.i(getClass().getName(),"Finished onCreate");
 
 	}

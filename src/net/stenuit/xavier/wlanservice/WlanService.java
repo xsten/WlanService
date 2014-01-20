@@ -92,12 +92,15 @@ public class WlanService extends Service{
     		public static final String CONNECTIVITY_ACTION_IMMEDIATE =
             "android.net.conn.CONNECTIVITY_CHANGE_IMMEDIATE";
 			 */
+			/* essai en 4.3 sans le hack.  Peut-être plus optimal ??? A vérifier
 			if(android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.JELLY_BEAN_MR1)
 			{
 				Log.i(getClass().getName(),"Detected android > 4.2, adding new CONNECTIVITY_CHANGE_IMMEDIATE");
 				intf.addAction("android.net.conn.CONNECTIVITY_CHANGE_IMMEDIATE");
 			}
+			*/
 			this.registerReceiver(myBroadcastReceiver, intf);
+			
 		}
 		catch(Exception e){
 			Log.e(getClass().getName(), "Caught Exception", e);
