@@ -1,5 +1,8 @@
 package net.stenuit.xavier.wlanservice.authentiker;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Map;
 
 import net.stenuit.xavier.wlanservice.R;
@@ -79,5 +82,30 @@ public abstract class Authentiker extends AsyncTask<Object/*params*/, Object/*pr
 			Log.d(getClass().getName(),"null answer");
 		}
 		
+	}
+	
+	protected boolean isCaptivePortal()
+	{
+		String mUrl = "http://www.google.com/generate_204";
+	    Log.d(getClass().getName(),"Checking " + mUrl);
+	    HttpURLConnection urlConnection=null;
+	    try {
+	        URL url = new URL(mUrl);
+	        urlConnection = (HttpURLConnection) url.openConnection();
+	        urlConnection.setInstanceFollowRedirects(false);
+	        urlConnection.setConnectTimeout(200);
+	        urlConnection.setReadTimeout(200);
+	        urlConnection.setUseCaches(false);
+	        urlConnection.getInputStream();
+	        // we got a valid response, but not from the real google
+	        return urlConnection.getResponseCode() != 204;
+	    } catch (IOException e) {
+	        Log.w(getClass().getName(),"Probably not a portal: exception " + e);
+	        return false;
+	    } finally {
+	        if (urlConnection != null) {
+	            urlConnection.disconnect();
+	        }
+	    }
 	}
 }

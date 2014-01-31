@@ -56,7 +56,9 @@ public class GuestAuthentiker extends Authentiker {
 		
 		try
 		{
-			// Log.d(getClass().getName(),"Check whether we are redirected");
+			Log.d(getClass().getName(),"Check whether we are redirected");
+			
+			if(!isCaptivePortal())return null; // already connected - avoids looping message
 			// sleeping 2 seconds
 			Thread.sleep(2000);
 			
