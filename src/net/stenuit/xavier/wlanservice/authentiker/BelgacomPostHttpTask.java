@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +15,23 @@ import net.stenuit.xavier.wlanservice.R;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -57,9 +59,11 @@ public class BelgacomPostHttpTask extends Authentiker {
 		String login=super.getCredentials().get("login");
 		String password=super.getCredentials().get("password");
 		
+		// Check whether we are redirected
+		if(!isCaptivePortal())return null;			
+		
 		try
 		{
-			
 			localKeyStore=KeyStore.getInstance("BKS");
 			InputStream in=res.openRawResource(R.raw.mykeystore);
 			localKeyStore.load(in,"password".toCharArray());
@@ -71,78 +75,36 @@ public class BelgacomPostHttpTask extends Authentiker {
 			HttpParams params = new BasicHttpParams();
 			ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
 
-			HttpClient client = new DefaultHttpClient(cm, params);
-
-			// textView.append("creating post object");
-			                           
-			// Check whether we are redirected
-			URL url=new URL("http://www.w3.org");
-			HttpURLConnection.setFollowRedirects(false); // Don't trust java redirects - it fails when protocol switches from http to https
-			HttpURLConnection cnx=(HttpURLConnection)(url).openConnection();
-			boolean mustLogin=false;
-					
-			String cookies="";
-			try
-			{
-				if(cnx.getURL().getHost().equals(url.getHost()) && (!(cnx.getResponseCode()==302)))
-				
-				{
-					Log.i(getClass().getName(),"No redirection");
-					return null; // no need to connect.
-				}
-				else
-				{
-					String newUrl=cnx.getHeaderField("Location");
-					Log.i(getClass().getName(),"Redirected to : "+newUrl);
-					
-					cookies=cnx.getHeaderField("Set-Cookie");
-					Log.i(getClass().getName(),"Set-Cookie before redirect : "+cookies); // no cookie there
-					cnx.disconnect(); // Closing the first connection
-					
-					
-					cnx=(HttpURLConnection)new URL(newUrl).openConnection(); // Open connection on the redirect link
-					if(cookies!=null && cookies.length()>0)
-					{
-						Log.i(getClass().getName(),"Re-sending cookie : "+cookies);
-						cnx.addRequestProperty("Set-Cookie", cookies);
-					}
-					else
-					{
-						mustLogin=true;
-					}
-					
-					/* Map toto= */ cnx.getHeaderFields(); // reads headers (headers contain cookies)
-//					Set titi=toto.keySet();
-//					for(Iterator i=titi.iterator();i.hasNext();)
-//					{
-//						Object o=i.next();
-//						Log.i(getClass().getName(),"Read "+o);
-//						Log.i(getClass().getName(),toto.get(o).toString());
-//					}
-					
-					cookies=cnx.getHeaderField("Set-Cookie");
-					Log.i(getClass().getName(),"Set-Cookie after redirect : "+cookies);
-				}
-				
-			}
-			finally
-			{
-				cnx.disconnect();
-			}
+			DefaultHttpClient client = new DefaultHttpClient(cm, params);
+	        
+			HttpGet httpGet=new HttpGet("http://www.w3.org");
+			HttpResponse resp=client.execute(httpGet);
 			
-			if(mustLogin)
+			org.apache.http.client.CookieStore store=client.getCookieStore();
+			List<Cookie> cookieList=store.getCookies();
+			
+			if(cookieList!=null)
 			{
+				for(Cookie c:cookieList)
+				{
+					Log.d(getClass().getName(),"Cookie:"+c.getName());
+				//	store.addCookie(c);
+				}
+			}
 				Log.i(getClass().getName(),"Sending login to belgacom");
+				
+				HttpContext  ctx=new BasicHttpContext();
+				ctx.setAttribute(ClientContext.COOKIE_STORE, store);
 				
 				HttpPost post=new HttpPost("https://belgacom.portal.fon.com/en/login/processLogin");
 				List<NameValuePair> pairs=new ArrayList<NameValuePair>();
 				pairs.add(new BasicNameValuePair("login[user]", login));
 				pairs.add(new BasicNameValuePair("login[pass]", password));
+				pairs.add(new BasicNameValuePair("login_reminder","false")); // has been added by Belgacom
 				pairs.add(new BasicNameValuePair("commit", "Login"));
 				post.setEntity(new UrlEncodedFormEntity(pairs));
-				post.addHeader("Cookie",cookies); // With cookies, we get a positive answer... Otherwise 404 
-			
-				response=client.execute(post);
+				
+				response=client.execute(post,ctx);
 			
 				Log.i(getClass().getName(),"Response : "+response.getStatusLine().getStatusCode());
 				InputStream is=response.getEntity().getContent();
@@ -172,7 +134,7 @@ public class BelgacomPostHttpTask extends Authentiker {
 				{
 					is.close();
 				}
-			}
+			
 		}
 		catch(Exception e)
 		{
