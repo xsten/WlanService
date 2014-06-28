@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.stenuit.xavier.wlanservice"
-    android:versionCode="2160"
-    android:versionName="2.16" >
+    android:versionCode="2180"
+    android:versionName="2.18" >
 	<!-- 1.00 first commited version -->
 	<!-- 1.01 removed unuseful button from gui -->
 	<!-- 1.02 Attempts to login only if connected to the correct network SSID + some renames -->
@@ -24,12 +24,17 @@
 	<!-- 2.14 suppressed CONNECTIVITY_CHANGE_DELAY hack, and "manual connect" button (superflous) -->
 	<!-- 2.15 check the network with guest APN : reduces number of popups -->
 	<!-- 2.16 changed cookie management for Belgacom FON -->
+	<!-- 2.17 possibility to autoboot (not deployed) -->
+	<!-- 2.18 adaptations to new Belgacom Fon login pages -->
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="19" />
         <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
         <uses-permission android:name="android.permission.INTERNET" />
+        <!-- Uncomment for autoboot
+        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+        -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/wlanservicelogo"
@@ -39,6 +44,15 @@
         	android:name="net.stenuit.xavier.wlanservice.WlanService"
         	android:enabled="true">
     	</service>
+    	<!-- Autoboot
+    	<receiver android:enabled="true" android:name=".MyBroadcastReceiver"
+    	    android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+    	    <intent-filter>
+    	        <action android:name="android.intent.action.BOOT_COMPLETED" />
+    	        <category android:name="android.intent.category.DEFAULT" />
+    	    </intent-filter>
+    	</receiver>
+    	-->
     	<activity
             android:name="net.stenuit.xavier.wlanservice.MainActivity"
             android:label="@string/app_name" 
