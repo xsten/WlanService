@@ -49,6 +49,18 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 	public void onReceive(Context ctx, Intent intent) {		
 		Log.d(getClass().getName(),"onReceive called");
 		
+		Log.d(getClass().getName(),"Intent="+intent.getAction());
+		
+		/*
+		if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
+		{
+			Intent i=new Intent(ctx,MainActivity.class);
+			i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			ctx.startActivity(i);
+			return;
+		}
+		*/
+		
 		Log.d(getClass().getName(),"list of authentikers : ");
 		// Lists the active authentikers
 		for(String s:authentikerActive.keySet())
