@@ -83,6 +83,10 @@ public class WlanService extends Service{
 		try
 		{
 			IntentFilter intf=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+			/* Uncomment for autoboot
+			intf.addAction(Intent.ACTION_BOOT_COMPLETED);
+			*/
+			
 			/*
 			 * D'après des sources internet, il existe également un autre événement plus rapide !
 			 * https://android.googlesource.com/platform/frameworks/base.git/+/android-4.3_r2.1/core/java/android/net/ConnectivityManager.java
