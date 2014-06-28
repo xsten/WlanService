@@ -80,6 +80,28 @@ public class BelgacomPostHttpTask extends Authentiker {
 			HttpGet httpGet=new HttpGet("http://www.w3.org");
 			HttpResponse resp=client.execute(httpGet);
 			
+			InputStream xis=resp.getEntity().getContent();
+			BufferedReader xbr=new BufferedReader(new InputStreamReader(xis));
+			String xs=xbr.readLine();
+			
+			String postURL="";
+			while(xs!=null)
+			{
+				System.out.println(xs);
+				xs=xbr.readLine();
+				
+				if(xs!=null && xs.contains("<form method=\"post\" action=\"https://belgacom.portal.fon.com/SAGBEL01"))
+				{
+					int urlStart=xs.indexOf("action=\"")+8;
+					int urlEnd=xs.indexOf("\"",urlStart+1);
+					System.out.println("urlStart:"+urlStart);
+					System.out.println("urlEnd:"+urlEnd);
+					
+					postURL=xs.substring(urlStart, urlEnd);
+					System.out.println("postURL="+postURL);
+				}
+			}
+			
 			org.apache.http.client.CookieStore store=client.getCookieStore();
 			List<Cookie> cookieList=store.getCookies();
 			
@@ -96,12 +118,12 @@ public class BelgacomPostHttpTask extends Authentiker {
 				HttpContext  ctx=new BasicHttpContext();
 				ctx.setAttribute(ClientContext.COOKIE_STORE, store);
 				
-				HttpPost post=new HttpPost("https://belgacom.portal.fon.com/en/login/processLogin");
+				HttpPost post=new HttpPost(postURL);
 				List<NameValuePair> pairs=new ArrayList<NameValuePair>();
-				pairs.add(new BasicNameValuePair("login[user]", login));
-				pairs.add(new BasicNameValuePair("login[pass]", password));
-				pairs.add(new BasicNameValuePair("login_reminder","false")); // has been added by Belgacom
-				pairs.add(new BasicNameValuePair("commit", "Login"));
+				pairs.add(new BasicNameValuePair("USERNAME", login));
+				pairs.add(new BasicNameValuePair("PASSWORD", password));
+				pairs.add(new BasicNameValuePair("remember","false")); // has been added by Belgacom
+				// pairs.add(new BasicNameValuePair("commit", "Login"));
 				post.setEntity(new UrlEncodedFormEntity(pairs));
 				
 				response=client.execute(post,ctx);
@@ -111,23 +133,32 @@ public class BelgacomPostHttpTask extends Authentiker {
 				try
 				{
 					BufferedReader br=new BufferedReader(new InputStreamReader(is));
-					Log.d(getClass().getName(),"Please check the resulting login page here !");
-					String s=br.readLine();
-					while(s!=null)
-					{
-						Log.d(getClass().getName(), s);
+					System.out.println(getClass().getName()+"Please check the resulting login page here !");
+					
+						String redirectURL="";
 						
-						if("There has been an error. Please try again later.".equals(s.trim()))
+						String s=br.readLine();
+						while(s!=null)
 						{
-							// if wrong, we shall respond with "unauthorized=401" http response
-							// simulates this behaviour by forging this answer
-							response.getEntity().consumeContent();
-							is.close();
-							response=new BasicHttpResponse(HttpVersion.HTTP_1_1,401,"Unauthorized");
+							System.out.println(getClass().getName()+ s);
+							
+							if(s.contains("http-equiv=\"refresh"))
+							{
+								int startIndex=s.indexOf("url=")+4;
+								int endIndex=s.indexOf("\"",startIndex+1);
+								redirectURL=s.substring(startIndex,endIndex);
+							}
+							
+							s=br.readLine();
 						}
 						
-						s=br.readLine();
-					}
+						redirectURL=redirectURL.replaceAll("%40", "@");
+						redirectURL=redirectURL.replaceAll("&amp;", "&");
+						System.out.println("Sending request to "+redirectURL);
+						httpGet=new HttpGet(redirectURL);
+						resp=client.execute(httpGet);
+	
+					System.out.println("after redirection : "+resp.getStatusLine());
 					
 				}
 				finally
