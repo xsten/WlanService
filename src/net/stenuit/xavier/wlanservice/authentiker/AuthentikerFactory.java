@@ -30,6 +30,9 @@ public class AuthentikerFactory {
 				"\"free-hotspot.com\"".equals(ssid)	)return new FreeHotspotDotComAuthentiker();
 		if("GratWiFi".equals(ssid)||
 				"\"GratWiFi\"".equals(ssid))return new GratwifiAuthentiker();
+		if("SFR WiFi FON".equals(ssid)||
+				"\"SFR WiFi FON\"".equals(ssid)) return new SfrFonAuthentiker();
+		
 		// if("clear-guest".equals(ssid))return new ClearGuestAuthentiker();
 		Log.i(getClass().getName(),"Not found");
 		return null;
